@@ -1,0 +1,160 @@
+You are a code agent with access to a terminal (Bash) in this project —
+whether Claude Code, Codex, opencode (with any model: DeepSeek, GLM,
+Kimi, etc.) or similar. None of these instructions depend on which
+agent or model you are — you only need to read/write files and
+run Bash commands.
+
+Your mission: create the full script for a faceless YouTube video in
+the animated curiosity channel style (like Whymentary), in English.
+
+━━━ PART 0: PICK A TOPIC ━━━
+Generate 5 video ideas for a curiosity channel in English.
+
+Content type: questions the viewer never thought to ask, but once heard,
+they can't ignore. One topic per video, told narratively without the
+creator appearing on camera.
+
+Topics that work in this niche:
+- Psychology and cognitive biases (fears, habits, irrational emotions)
+- Surprising history (facts that contradict what you learned in school)
+- Everyday science (why things you take for granted happen)
+- Human nature (sleep, memory, pain, instincts)
+- Accessible philosophy (dilemmas anyone can understand)
+
+Title patterns that work:
+- "Why [everyday phenomenon nobody questions]?"
+- "The [psychological or social concept] Effect"
+- "What If [surprising but believable hypothesis]?"
+- "The Real Reason [common belief that's false]"
+- "How [mental process] Is Controlling Your Life Without You Knowing"
+
+Evaluate the 5 ideas by viral potential for a curious 25-45 audience.
+Auto-pick the best one, mark it with ⭐, and proceed without waiting.
+
+If the user already gave you a topic in their message, skip this part
+and use it directly.
+
+━━━ PART 1: SCRIPT ━━━
+Write the full script in neutral English on the chosen topic
+(1,200 words ≈ 8 minutes).
+
+Structure:
+• HOOK (15s): open with the most unexpected question or fact about
+  the topic. The viewer must think "I didn't know that" within 5 seconds.
+• CONTEXT (30s): why this topic matters more than it seems. Connect
+  it to something the viewer already knows.
+• BODY: 3-4 blocks of 90s each, each ending with an unexpected mini-twist.
+• FINAL FACT: save the most impactful fact for the closing.
+• CLOSE + CTA: 2 conclusion sentences + an open question for comments
+  + like and subscribe.
+
+Rules:
+- Short sentences (8-12 words on average)
+- Second-person narrative tone (you)
+- No lists or bullets — continuous oral narration
+- Concrete, comparable facts ("10 times more than", "the equivalent of
+  filling a stadium")
+- Each body block ends with: "But what nobody expected is..."
+
+━━━ PART 2: SPLIT INTO VISUAL BLOCKS ━━━
+Split the script into 4-6 second segments (~12-18 words each).
+Show them numbered like this: [01] text... [02] text... [03] text...
+
+━━━ PART 3: GENERATE THE IMAGES YOURSELF VIA SCRIPT (Bash) ━━━
+No more Magnific or MCP. You have access to a terminal (Bash). For each
+numbered segment, generate its image by running:
+
+    python scripts/gen_image_gemini.py --prompt "<visual description of the segment, in English, WITHOUT style instructions>" --out output/<topic-slug>/<NN>.png
+
+This is the FREE default path (Gemini "Nano Banana", free daily quota
+on Google AI Studio, same GEMINI_API_KEY as voice). If it fails due
+to quota exhaustion, or if the user asks for higher quality, use
+`scripts/gen_image.py` instead (same arguments, via OpenRouter, paid —
+seedream-4.5 by default).
+
+Where <topic-slug> is the chosen title in lowercase with hyphens, and
+<NN> is the two-digit segment number (01, 02, 03...). The script already
+automatically adds the required style (stick figures / MS Paint / 16:9)
+— you only pass the detailed visual content of each segment.
+
+Rules for each image prompt — BE VERY SPECIFIC AND DETAILED, never
+a generic one-liner. Each prompt must be 3-6 sentences (60-120 words)
+covering ALL these points:
+- Framing: wide, medium, or close-up shot; what occupies the center.
+- Subject(s): exact pose, what each figure is doing, specific facial
+  expression (smiling, furrowed brows, O-mouth of surprise...),
+  position in the frame (left/center/right, foreground/background).
+- Objects: each relevant object described with its exact shape and
+  color, and where it's placed relative to the subject (above, to the
+  right, behind...). Not "a computer" — rather "a beige desktop monitor
+  with a glowing blue screen, sitting on a small two-legged wooden desk
+  to the right".
+- Background/scene: what's behind (blank wall, house silhouette, simple
+  interior...) so it's not an ambiguous void.
+- On-screen text (if applicable): the EXACT word or phrase in quotes
+  that should appear written (e.g., a sign, a screen, a banner).
+- Element relationships: how they connect visually (a dotted line, an
+  arrow, a clear distance between two elements).
+- DO NOT add generic style instructions (stick figures, MS Paint, 16:9,
+  etc.) — the script already adds those automatically for all images.
+- Each image must be understandable on its own, without reading the
+  script, as a complete and unambiguous visual explanation of its segment.
+
+Run one command per segment, in order, one after another (you may run
+them in parallel if your environment allows it). If a command fails
+(missing OPENROUTER_API_KEY, network error, etc.), show the error and
+stop at that segment instead of continuing silently.
+
+━━━ PART 4: SAVE THE SCRIPT ━━━
+Besides the images, save the full script to
+output/<topic-slug>/script.txt (to use later for voice-over) and
+the segment list with their narrated text to
+output/<topic-slug>/segments.json.
+
+━━━ PART 5: VOICE AND ASSEMBLY (Bash) ━━━
+Generate the narration with the free default engine (Microsoft Edge TTS,
+no API key, no quota):
+
+    python scripts/tts_edge.py --text-file output/<topic-slug>/script.txt --out output/<topic-slug>/narration.mp3
+
+If the user asks for higher quality/expressiveness and has
+GEMINI_API_KEY, use instead (same result, different engine):
+
+    python scripts/tts_gemini.py --text-file output/<topic-slug>/script.txt --out output/<topic-slug>/narration.wav
+
+━━━ PART 6: ANIMATED SUBTITLES ━━━
+Generate the subtitles as a standalone video with a transparent background
+(plus an .srt for uploading to YouTube):
+
+    python scripts/gen_subtitles.py --dir output/<topic-slug>
+
+This creates output/<topic-slug>/subtitles.webm (words appear ONE BY ONE,
+each with its own entrance animation, synced to the same timings as the
+images) and subtitles.srt.
+
+━━━ PART 7: CLEAN VIDEO (NO SUBTITLES) ━━━
+First assemble the clean master: images + audio, with a smooth Ken Burns
+zoom on each image alternating between zoom-in and zoom-out:
+
+    python scripts/assemble_video.py --dir output/<topic-slug> --audio output/<topic-slug>/narration.mp3
+
+(adjust --audio path to narration.wav if you used tts_gemini.py).
+Result: output/<topic-slug>/final_clean.mp4 -- no text at all.
+
+━━━ PART 8: VIDEO WITH SUBTITLES ━━━
+Overlay the subtitles onto that master. This step is fast because it does
+NOT re-render the zoom, it only re-encodes:
+
+    python scripts/burn_subtitles.py --dir output/<topic-slug>
+
+Result: output/<topic-slug>/final.mp4 -- same video with the animated
+subtitles burned in.
+
+You end up with BOTH versions: final_clean.mp4 (no subtitles) and
+final.mp4 (with subtitles).
+
+Useful options: `--zoom 1.15` for a stronger zoom, `--no-zoom` to disable
+it, `--encoder h264_videotoolbox` for hardware encoding (much faster on Mac).
+
+Start with PART 0 (or use the given topic) and proceed without stopping
+or asking for confirmation until both versions are assembled.

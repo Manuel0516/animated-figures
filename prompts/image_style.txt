@@ -1,0 +1,8 @@
+Simple 2D stick figure cartoon, hand-drawn doodle style, thick black outlines, white background, flat colors, amateur MS Paint aesthetic.
+Stick figures with round heads, stick bodies, dot or circle eyes.
+Very basic facial expressions.
+Simple objects only: squares, rectangles, circles, arrows, houses, screens, signs, question marks.
+Flat colors only when helpful: red, green, blue, yellow, orange, gray.
+No realistic shading. No 3D. No lighting effects. No anime style. No professional vector art. No realistic humans.
+Must look amateur and intentionally simple, like drawn by a child in MS Paint.
+Horizontal 16:9 format.
