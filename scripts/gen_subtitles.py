@@ -28,6 +28,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from brand import BRAND  # noqa: E402
 from ffmpeg_pipe import QUIET_ARGS, FfmpegSink  # noqa: E402
 from timing import (  # noqa: E402
     compute_timeline,
@@ -39,8 +40,8 @@ from timing import (  # noqa: E402
     smoothstep,
 )
 
-WIDTH, HEIGHT = 1920, 1080
-FPS = 30
+WIDTH, HEIGHT = BRAND.canvas.width, BRAND.canvas.height
+FPS = BRAND.canvas.fps
 # Subtitles occupy a band near the bottom, so only that band is rasterized and
 # it gets padded out to full frame once, in ffmpeg.
 STRIP_HEIGHT = 400
@@ -270,12 +271,15 @@ def main():
                              "mov (qtrle lossless, large), prores (QuickTime/FCP). Default: webm.")
     parser.add_argument("--font", help="Path to a bold .ttf font.")
     parser.add_argument("--font-size", type=int, default=64, help="Font size in px (default: 64).")
-    parser.add_argument("--stroke", type=int, default=8, help="Black outline thickness in px (default: 8).")
+    parser.add_argument("--stroke", type=int, default=BRAND.typography.caption_stroke_px,
+                        help=f"Black outline thickness in px (default: {BRAND.typography.caption_stroke_px}, from brand.yaml).")
     parser.add_argument("--line-spacing", type=int, default=10, help="Extra px between wrapped lines (default: 10).")
-    parser.add_argument("--pop", type=float, default=0.18, help="Seconds each word takes to animate in (default: 0.18).")
+    parser.add_argument("--pop", type=float, default=BRAND.motion.pop_in_seconds,
+                        help=f"Seconds each word takes to animate in (default: {BRAND.motion.pop_in_seconds}, from brand.yaml).")
     parser.add_argument("--slide", type=float, default=14, help="Px each word rises as it pops in (default: 14).")
     parser.add_argument("--fade", type=float, default=0.18, help="Seconds the block fades out at segment end (default: 0.18).")
-    parser.add_argument("--accent", default="FFD24A", help="Hex colour flashed on the newest word (default: FFD24A).")
+    parser.add_argument("--accent", default=BRAND.palette.accent,
+                        help=f"Hex colour flashed on the newest word (default: {BRAND.palette.accent}, from brand.yaml).")
     parser.add_argument("--reveal-fraction", type=float, default=0.7,
                         help="Fraction of each segment used to reveal all its words (default: 0.7).")
     parser.add_argument("--margin-bottom", type=int, default=70, help="Px from strip bottom to frame bottom (default: 70).")

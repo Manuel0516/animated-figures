@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zero-five-projects/schemas/character.schema.json",
+  "title": "character spec",
+  "description": "What a project.json `character` scene's `visual.spec` file points to. Consumed by scripts/render/character_scene.py -- a brief, static, on-brand stick-figure beat for the 'general overview, then zoom into detail' narrative transition. No rig, no gestures beyond the fixed named poses below.",
+  "type": "object",
+  "required": ["pose"],
+  "properties": {
+    "pose": {
+      "enum": ["overview", "point-right"],
+      "description": "overview: open, presenting stance for a 'here's the whole system' beat. point-right: one arm extended, for the transition into a diagram placed to the right."
+    },
+    "duration": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "default": 3.0,
+      "description": "Seconds the pose holds after its pop-in. Purely a manim-side pacing hint -- assemble_project.py still pads/truncates the rendered clip to whatever timing.py actually assigned the scene from narration."
+    }
+  }
+}

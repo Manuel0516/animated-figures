@@ -87,11 +87,21 @@ cd /Users/manuel/Desktop/Animated-figures
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-brew install ffmpeg   # si no lo tienes ya
+brew install ffmpeg pango   # pango (+ cairo, que suele venir con él) hace falta para manim
 cp .env.example .env
 # edita .env y añade:
 #   GEMINI_API_KEY      -> https://aistudio.google.com/apikey (imágenes gratis + voz)
 #   OPENROUTER_API_KEY  -> https://openrouter.ai/keys (solo si quieres el camino de pago)
+```
+
+Los diagramas (`scripts/render_diagram.py`) usan un [Nerd Font](https://www.nerdfonts.com/)
+como tipografía (`brand.yaml` → `typography.diagram_family`, por defecto
+`JetBrainsMono Nerd Font`) para poder usar sus glifos de icono (portátil,
+servidor, nube, candado...) como pictogramas simples en los nodos, sin
+necesitar assets SVG aparte. Instálalo si no lo tienes:
+
+```bash
+brew install --cask font-jetbrains-mono-nerd-font
 ```
 
 ## Uso
@@ -197,23 +207,155 @@ prueba:
 Por eso los frames se rasterizan en Pillow, cuyo `resize(box=...)` acepta
 coordenadas decimales y da un movimiento geométricamente exacto.
 
+## Identidad de marca (brand.yaml)
+
+`brand.yaml`, en la raíz del repo, es la única fuente de verdad para el
+canvas (1920×1080/30fps), la paleta (fondo casi negro `#0E0E10`, tinta
+`#F5F3EC`, acento dorado `#FFD24A` — el mismo que ya usaban los subtítulos
+por defecto), tipografía y timing de las animaciones (`0.18s`, `smoothstep`).
+`scripts/brand.py` lo carga una sola vez (`from brand import BRAND`) y
+`gen_subtitles.py`/`assemble_video.py` leen sus constantes de ahí en vez de
+tener cada uno su propia copia hardcodeada.
+
+## Vídeos con metraje real + diagramas (project.json)
+
+Para vídeos que mezclan tu propio metraje con diagramas de ingeniería
+(en vez del formato antiguo de una imagen generada por segmento),
+`project.json` sustituye a `segments.json`: mismo array plano de escenas
+con `index`/`text` (así `timing.py` no cambia), pero cada escena añade un
+objeto `visual` que dice cómo se renderiza:
+
+```json
+{"type": "footage", "src": "footage/raw/found-parts.mov", "in": 4.0, "out": 9.5, "confirmed": true}
+{"type": "diagram", "spec": "diagrams/scene-003.json"}
+{"type": "character", "spec": "characters/scene-002.json"}
+{"type": "still", "src": "03.png"}
+{"type": "text-card", "text": "VM vs CT"}
+```
+
+Esquema completo en [`schemas/project.schema.json`](schemas/project.schema.json),
+ejemplo real (vídeo de homelab) en
+[`schemas/project.example.json`](schemas/project.example.json).
+
+El matching de metraje (`footage`) es **confirmado por ti**, no automático:
+el campo `confirmed` debe estar en `true` antes de montar la escena — el
+agente no puede ver de verdad el contenido de un clip, así que propone
+`in`/`out` y tú los confirmas o corriges.
+
+### Flujo
+
+```bash
+python scripts/footage_inventory.py --dir output/homelab          # lista tus clips (duración/resolución) para hacer el matching
+python scripts/render_diagram.py --spec output/homelab/diagrams/scene-003.json \
+                                  --out output/homelab/diagrams/scene-003.mp4   # una vez por cada escena "diagram"
+python scripts/project_status.py --dir output/homelab             # qué falta antes de montar
+python scripts/assemble_project.py --dir output/homelab           # -> final_clean.mp4
+python scripts/gen_subtitles.py --dir output/homelab              # -> subtitles.webm (lee segments.json o project.json, mismo formato)
+python scripts/burn_subtitles.py --dir output/homelab             # -> final.mp4
+```
+
+### Escenas `diagram` (manim)
+
+Cada `diagram` de `project.json` apunta a un spec JSON con nodos, conexiones
+y el orden en que aparecen, renderizado por
+[`scripts/render/diagram_scene.py`](scripts/render/diagram_scene.py) — un
+único `manim.Scene` genérico que lee el spec en vez de tener una escena de
+manim escrita a mano por diagrama. Todo el estilo (fondo, color de tinta y
+acento, grosor de línea, radio de esquina, timing del pop-in) sale de
+`brand.yaml`, no de constantes en el archivo:
+
+```json
+{
+  "duration": 6.0,
+  "nodes": [
+    {"id": "laptop", "label": "Old Laptop", "icon": "2", "position": [-4.5, 1.2, 0]},
+    {"id": "vps", "label": "VPS", "icon": "f", "position": [4.5, 1.2, 0]}
+  ],
+  "edges": [
+    {"from": "laptop", "to": "vps", "label": "WireGuard", "style": "dashed", "direction": "forward"}
+  ],
+  "reveal": [
+    {"at": 0.0, "show": ["laptop"]},
+    {"at": 1.0, "show": ["vps"]},
+    {"at": 1.5, "show": ["laptop->vps"]}
+  ],
+  "highlight": [{"at": 3.0, "id": "laptop->vps"}]
+}
+```
+
+Reglas fijas, no configurables por diagrama (para que ninguno se salga del
+estilo del canal):
+
+- las conexiones siempre paran en el borde de la caja, nunca la atraviesan;
+- siempre llevan al menos una punta de flecha (`direction`: `forward`
+  por defecto, `both` para bidireccional, `none` solo para un enlace físico
+  pasivo sin flujo de datos);
+- las etiquetas de una conexión llevan un fondo opaco detrás, así nunca se
+  ven superpuestas con la línea sea cual sea el ángulo;
+- el campo `icon` de un nodo es opcional y usa un glifo del Nerd Font
+  (`typography.diagram_family`) como pictograma simple, sin necesitar un
+  SVG aparte.
+
+`scripts/render_diagram.py` renderiza un spec a
+`output/<proyecto>/diagrams/scene-NNN.mp4` (convención que
+`assemble_project.py` y `project_status.py` esperan). `assemble_project.py`
+decodifica ese clip y lo recorta/rellena a la duración que le tocó en el
+timeline por narración, igual que hace con `footage`.
+
+### Escenas `character` (stickman de transición)
+
+Un recurso barato para el ritmo "primero lo general, luego entramos en
+detalle": un stick figure simple y estático (sin rig, sin gestos) que
+aparece brevemente antes de cortar a un diagrama — el mismo uso que le da
+Ardens a su personaje. Dos poses fijas, sin más:
+
+```json
+{"pose": "overview", "duration": 3.0}
+```
+
+- `overview` — brazos abiertos, postura de "aquí está el sistema completo".
+- `point-right` — un brazo extendido, para la transición justo antes de un
+  diagrama a la derecha.
+
+Esquema en [`schemas/character.schema.json`](schemas/character.schema.json).
+`scripts/render_character.py` renderiza un spec a
+`output/<proyecto>/characters/scene-NNN.mp4`, con el mismo tratamiento en
+`assemble_project.py`/`project_status.py` que `diagram`. Estilo (color,
+grosor de línea, timing del pop-in) sale de `brand.yaml`, igual que todo lo
+demás.
+
 ## Estructura del proyecto
 
 ```
+brand.yaml               # identidad de marca: canvas, paleta, tipografía, motion
+schemas/
+  project.schema.json     # esquema de project.json (footage/diagram/character/still/text-card)
+  project.example.json    # ejemplo real (vídeo de homelab)
+  diagram.schema.json     # esquema del spec de una escena "diagram" (nodos/edges/reveal/highlight)
+  character.schema.json   # esquema del spec de una escena "character" (pose/duration)
 prompts/
   master_prompt_es.txt   # prompt para pegar en tu agente (español)
   master_prompt_en.txt   # el mismo prompt en inglés
   image_style.txt        # estilo obligatorio stickman/MS Paint, aplicado a cada imagen
 scripts/
+  brand.py                 # carga brand.yaml una vez, expone canvas/paleta/tipografía/motion
   gen_image_gemini.py     # GRATIS por defecto: Gemini "Nano Banana" -> PNG
   gen_image.py             # DE PAGO: OpenRouter (seedream-4.5 por defecto) -> PNG
   tts_edge.py               # GRATIS por defecto: Microsoft Edge TTS -> MP3
   tts_gemini.py             # DE PAGO/cuota: Gemini TTS -> WAV
   gen_subtitles.py           # subtítulos palabra por palabra -> subtitles.webm (alfa) + .srt
-  assemble_video.py           # imágenes con zoom + audio -> final_clean.mp4
+  assemble_video.py           # imágenes con zoom + audio -> final_clean.mp4 (formato legacy, solo stills)
   burn_subtitles.py            # final_clean.mp4 + subtitles.webm -> final.mp4
-  timing.py                     # reparto de tiempos compartido (imágenes y subtítulos en sync)
-  ffmpeg_pipe.py                 # helper para escribir frames a ffmpeg sin bloquearse
+  timing.py                     # reparto de tiempos compartido (imágenes, diagramas y subtítulos en sync)
+  ffmpeg_pipe.py                 # FfmpegSink/FfmpegSource: escribir y leer frames de ffmpeg sin bloquearse
+  footage_inventory.py            # ffprobe de footage/raw/ -> duración/resolución de cada clip
+  project_status.py                # qué escenas de project.json están listas para montar
+  assemble_project.py               # project.json (still/footage/diagram/character) -> final_clean.mp4
+  render_diagram.py                  # spec de diagrama -> MP4, vía manim
+  render_character.py                 # spec de personaje (pose) -> MP4, vía manim
+  render/
+    diagram_scene.py                  # manim.Scene genérico: construye el diagrama a partir del spec JSON
+    character_scene.py                # manim.Scene genérico: stick figure estático a partir de una pose fija
 output/                 # generado en cada ejecución (gitignored)
 .env.example
 requirements.txt

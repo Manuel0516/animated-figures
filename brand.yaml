@@ -1,0 +1,37 @@
+# Single source of truth for the channel's visual identity.
+# Every renderer (captions, diagrams, stills, the footage/still assembler)
+# loads these values instead of hardcoding its own -- see scripts/brand.py.
+#
+# Palette and caption defaults are taken from what's already shipped:
+# the channel banner/avatar (near-black background, white line art) and
+# gen_subtitles.py's existing --accent FFD24A / --pop 0.18 defaults.
+
+name: zero-five-projects
+
+canvas:
+  width: 1920
+  height: 1080
+  fps: 30
+
+palette:
+  background: "#0E0E10"   # near-black, matches banner/avatar
+  ink: "#F5F3EC"           # off-white line/text color
+  accent: "#FFD24A"        # gold -- matches the existing caption accent exactly
+  success: "#3E9B72"
+  warning: "#F05A47"
+
+typography:
+  family: "Arial"                       # captions (gen_subtitles.py): Pango family name, "Arial Bold.ttf" registers as family "Arial", style "Bold"
+  diagram_family: "JetBrainsMono Nerd Font"  # diagrams (manim): Nerd Font, so node/prop icons can use its glyph set
+  label_weight: bold
+  caption_stroke_px: 8     # matches gen_subtitles.py's current default
+
+line:
+  primary_width: 4
+  secondary_width: 2
+  node_corner_radius: 8
+  style: clean_vector      # NOT the retired "amateur MS Paint" style
+
+motion:
+  pop_in_seconds: 0.18     # matches gen_subtitles.py's existing --pop default
+  ease: smoothstep         # same easing already used for captions + Ken Burns

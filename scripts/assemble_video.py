@@ -31,6 +31,7 @@ from pathlib import Path
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from brand import BRAND  # noqa: E402
 from ffmpeg_pipe import QUIET_ARGS, FfmpegSink, alpha_decoder_args  # noqa: E402
 from timing import (  # noqa: E402
     compute_timeline,
@@ -41,8 +42,8 @@ from timing import (  # noqa: E402
     smoothstep,
 )
 
-WIDTH, HEIGHT = 1920, 1080
-FPS = 30
+WIDTH, HEIGHT = BRAND.canvas.width, BRAND.canvas.height
+FPS = BRAND.canvas.fps
 
 _SOURCES: dict[str, Image.Image] = {}
 

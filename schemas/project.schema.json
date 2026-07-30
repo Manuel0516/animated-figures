@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zero-five-projects/schemas/project.schema.json",
+  "title": "project.json",
+  "description": "Successor to segments.json. Same flat array of narration scenes (index/text unchanged, so timing.py needs no changes), each now carrying a `visual` object that says how the scene is rendered: real footage, a manim diagram, a brief stick-figure beat, a still image, or a typographic text card.",
+  "type": "array",
+  "items": { "$ref": "#/$defs/scene" },
+  "$defs": {
+    "scene": {
+      "type": "object",
+      "required": ["index", "text", "visual"],
+      "properties": {
+        "index": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "1-based scene order, same field assemble_video.py already reads to find NN.png."
+        },
+        "text": {
+          "type": "string",
+          "description": "Narration text for this scene, same field timing.py already uses for word-count/word-timing sync."
+        },
+        "visual": {
+          "oneOf": [
+            { "$ref": "#/$defs/footage" },
+            { "$ref": "#/$defs/diagram" },
+            { "$ref": "#/$defs/character" },
+            { "$ref": "#/$defs/still" },
+            { "$ref": "#/$defs/text_card" }
+          ]
+        }
+      }
+    },
+    "footage": {
+      "type": "object",
+      "required": ["type", "src", "in", "out"],
+      "properties": {
+        "type": { "const": "footage" },
+        "src": {
+          "type": "string",
+          "description": "Path to a raw clip under footage/raw/, relative to the project dir."
+        },
+        "in": { "type": "number", "minimum": 0, "description": "Trim start, seconds into src." },
+        "out": { "type": "number", "exclusiveMinimum": 0, "description": "Trim end, seconds into src. Must be > in." },
+        "confirmed": {
+          "type": "boolean",
+          "default": false,
+          "description": "True once the user has confirmed this clip/timestamp match. assemble_project.py should refuse to render an unconfirmed footage scene -- matching is human-confirmed, not automatic, per the pipeline design."
+        }
+      }
+    },
+    "diagram": {
+      "type": "object",
+      "required": ["type", "spec"],
+      "properties": {
+        "type": { "const": "diagram" },
+        "spec": {
+          "type": "string",
+          "description": "Path to the diagram's declarative JSON spec (nodes/edges/labels/reveal order), relative to the project dir. Rendered by scripts/render_diagram.py into diagrams/<scene-id>.mp4."
+        }
+      }
+    },
+    "character": {
+      "type": "object",
+      "required": ["type", "spec"],
+      "properties": {
+        "type": { "const": "character" },
+        "spec": {
+          "type": "string",
+          "description": "Path to the character's declarative JSON spec (see schemas/character.schema.json: pose + duration), relative to the project dir. Rendered by scripts/render_character.py into characters/<scene-id>.mp4. A brief static beat, not a performing/gesturing character -- see scripts/render/character_scene.py."
+        }
+      }
+    },
+    "still": {
+      "type": "object",
+      "required": ["type", "src"],
+      "properties": {
+        "type": { "const": "still" },
+        "src": {
+          "type": "string",
+          "description": "Path to a still image, e.g. 03.png -- today's behavior via assemble_video.py's Ken Burns renderer, unchanged."
+        }
+      }
+    },
+    "text_card": {
+      "type": "object",
+      "required": ["type", "text"],
+      "properties": {
+        "type": { "const": "text-card" },
+        "text": {
+          "type": "string",
+          "description": "Bold typographic card text (e.g. a short comparison or definition), Pillow-rendered reusing gen_subtitles.py's tile/font helpers -- no manim needed."
+        }
+      }
+    }
+  }
+}

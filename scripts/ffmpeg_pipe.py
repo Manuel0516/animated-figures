@@ -32,6 +32,58 @@ def alpha_decoder_args(path):
     return []
 
 
+class FfmpegSource:
+    """ffmpeg subprocess you read raw frames from, with stderr safely drained.
+
+    Mirror of FfmpegSink, for the opposite direction: decoding a real footage
+    clip into raw frames instead of encoding rendered frames into a file.
+    Same deadlock risk applies, so the same fix (quiet ffmpeg + drain stderr
+    on a background thread) is used here too.
+    """
+
+    def __init__(self, cmd, tail_lines: int = 40):
+        self._proc = subprocess.Popen(
+            cmd, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        )
+        self._tail = deque(maxlen=tail_lines)
+        self._thread = threading.Thread(target=self._drain, daemon=True)
+        self._thread.start()
+
+    def _drain(self):
+        for raw in self._proc.stderr:
+            line = raw.decode(errors="replace").rstrip()
+            if line:
+                self._tail.append(line)
+        self._proc.stderr.close()
+
+    def read_frame(self, frame_size: int) -> bytes | None:
+        """One raw frame of exactly frame_size bytes, or None at EOF."""
+        buf = bytearray()
+        while len(buf) < frame_size:
+            chunk = self._proc.stdout.read(frame_size - len(buf))
+            if not chunk:
+                return None
+            buf.extend(chunk)
+        return bytes(buf)
+
+    def close(self) -> int:
+        try:
+            self._proc.stdout.close()
+        except BrokenPipeError:
+            pass
+        code = self._proc.wait()
+        self._thread.join(timeout=5)
+        return code
+
+    @property
+    def errors(self) -> str:
+        return "\n".join(self._tail)
+
+    def kill(self) -> None:
+        self._proc.kill()
+        self._proc.wait()
+
+
 class FfmpegSink:
     """ffmpeg subprocess you write raw frames to, with stderr safely drained."""
 

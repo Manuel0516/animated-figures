@@ -1,0 +1,59 @@
+[
+  {
+    "index": 1,
+    "text": "I found all of this sitting in the trash.",
+    "visual": {
+      "type": "footage",
+      "src": "footage/raw/found-parts.mov",
+      "in": 4.0,
+      "out": 9.5,
+      "confirmed": true
+    }
+  },
+  {
+    "index": 2,
+    "text": "First step: wiring it all together.",
+    "visual": {
+      "type": "footage",
+      "src": "footage/raw/wiring-bench.mov",
+      "in": 12.0,
+      "out": 18.0,
+      "confirmed": true
+    }
+  },
+  {
+    "index": 3,
+    "text": "Here's the plan: an old laptop and a mini PC, both talking to a VPS.",
+    "visual": {
+      "type": "diagram",
+      "spec": "diagrams/scene-003.json"
+    }
+  },
+  {
+    "index": 4,
+    "text": "Every connection to the VPS runs through an encrypted WireGuard tunnel.",
+    "visual": {
+      "type": "diagram",
+      "spec": "diagrams/scene-004.json"
+    }
+  },
+  {
+    "index": 5,
+    "text": "The laptop handles Wake-on-LAN and file sharing. The mini PC runs the WireGuard peer and Pi-hole.",
+    "visual": {
+      "type": "diagram",
+      "spec": "diagrams/scene-005.json"
+    }
+  },
+  {
+    "index": 6,
+    "text": "And this is it actually working: one packet, and the laptop wakes itself up.",
+    "visual": {
+      "type": "footage",
+      "src": "footage/raw/wol-test.mov",
+      "in": 30.0,
+      "out": 36.0,
+      "confirmed": true
+    }
+  }
+]

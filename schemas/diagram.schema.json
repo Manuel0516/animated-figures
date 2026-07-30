@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zero-five-projects/schemas/diagram.schema.json",
+  "title": "diagram spec",
+  "description": "What a project.json `diagram` scene's `visual.spec` file points to. Consumed by scripts/render/diagram_scene.py, one generic manim.Scene that builds the diagram from this spec -- so a diagram is authored as data, not bespoke manim code.",
+  "type": "object",
+  "required": ["nodes"],
+  "properties": {
+    "duration": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Total seconds the scene holds after its last reveal/highlight step. Purely a manim-side pacing hint -- assemble_project.py still pads/truncates the rendered clip to whatever timing.py actually assigned the scene from narration."
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "position"],
+        "properties": {
+          "id": { "type": "string", "description": "Referenced by edges' from/to and by reveal/highlight step ids." },
+          "label": { "type": "string" },
+          "icon": {
+            "type": "string",
+            "description": "Optional single Nerd Font glyph (brand.yaml typography.diagram_family), prepended to the label as a simple thin-line pictogram -- no separate SVG asset needed."
+          },
+          "position": {
+            "type": "array",
+            "items": { "type": "number" },
+            "minItems": 2,
+            "maxItems": 3,
+            "description": "manim coordinate space (~14.2 units wide for a 16:9 frame at default zoom), not pixels."
+          }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from", "to"],
+        "properties": {
+          "from": { "type": "string", "description": "A node id." },
+          "to": { "type": "string", "description": "A node id." },
+          "label": { "type": "string" },
+          "style": { "enum": ["solid", "dashed"], "default": "solid", "description": "solid for a physical/data connection, dashed for wireless/tunneled." },
+          "direction": {
+            "enum": ["forward", "backward", "both", "none"],
+            "default": "forward",
+            "description": "Which end(s) get an arrowhead. 'none' is an explicit opt-out for a passive physical link -- edges always show a direction otherwise."
+          }
+        }
+      }
+    },
+    "reveal": {
+      "type": "array",
+      "description": "Timed entrance order. Each step fades in the listed node/edge ids (edge id = \"<from>-><to>\") at the given time.",
+      "items": {
+        "type": "object",
+        "required": ["at", "show"],
+        "properties": {
+          "at": { "type": "number", "minimum": 0 },
+          "show": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "highlight": {
+      "type": "array",
+      "description": "Timed accent flashes (brand.yaml palette.accent) on a single node/edge id -- the same visual cue captions already use for \"the word being said right now\".",
+      "items": {
+        "type": "object",
+        "required": ["at", "id"],
+        "properties": {
+          "at": { "type": "number", "minimum": 0 },
+          "id": { "type": "string" }
+        }
+      }
+    }
+  }
+}
