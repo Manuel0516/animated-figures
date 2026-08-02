@@ -16,6 +16,23 @@ está listo pero el canal publica en inglés por ahora.
 inyecta automáticamente en cada `still` vía `prompts/image_style.txt`;
 los prompts de imagen solo describen qué está haciendo el ingeniero.
 
+**El "cerebro" (guión):** se genera con **gpt-5.6-sol vía la suscripción de
+ChatGPT Codex** (`chatgpt.com/backend-api/codex`, OAuth) — NO OpenRouter.
+`scripts/gen_script.py` lee el master prompt, aplica el formato del canal y
+escribe `script.txt` + `project.json` (+ specs de diagrama). El token OAuth
+se lee de `~/.hermes/auth.json` (login: `hermes auth login openai-codex`) o
+de la env var `CODEX_ACCESS_TOKEN`.
+
+Flujo completo (2 comandos, 100% autónomo):
+
+```bash
+# 1) El cerebro: gpt-5.6-sol (Codex subscription) elige concepto + escribe guión
+python scripts/gen_script.py --lang en                          # o --topic "..."
+
+# 2) La fábrica: imágenes (OpenRouter), manim, narración, subtítulos, montaje
+python scripts/run_all.py --dir output/<slug> --lang en
+```
+
 1. Copia `prompts/master_prompt_en.txt` (inglés) o `prompts/master_prompt_es.txt`
    (español) en tu agente de código (Claude Code, Codex, opencode, Hermes...).
    El agente elige el tema, escribe el guión (5 min) y genera `project.json`
