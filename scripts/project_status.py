@@ -28,9 +28,8 @@ def check_scene(scene, video_dir):
         src = video_dir / rel_src
         if not src.exists():
             return False, f"clip no encontrado: {rel_src}"
-        if not visual.get("confirmed"):
-            return False, f"clip sin confirmar: {rel_src} [{visual.get('in', '?')}s-{visual.get('out', '?')}s]"
-        return True, f"metraje confirmado: {rel_src} [{visual['in']:.1f}s-{visual['out']:.1f}s]"
+        mark = "" if visual.get("confirmed") else " (sin confirmar, se monta igual)"
+        return True, f"metraje{mark}: {rel_src} [{visual.get('in', '?')}s-{visual.get('out', '?')}s]"
 
     if vtype == "diagram":
         rel_spec = visual.get("spec")

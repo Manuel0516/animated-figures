@@ -290,7 +290,14 @@ def main():
         sys.exit("ffmpeg/ffprobe no encontrados. Instala con: brew install ffmpeg")
 
     video_dir = Path(args.dir)
-    segments = json.loads((video_dir / "segments.json").read_text(encoding="utf-8"))
+    proj_path = video_dir / "project.json"
+    seg_path = video_dir / "segments.json"
+    if proj_path.exists():
+        segments = json.loads(proj_path.read_text(encoding="utf-8"))
+    elif seg_path.exists():
+        segments = json.loads(seg_path.read_text(encoding="utf-8"))
+    else:
+        sys.exit(f"No encuentro project.json ni segments.json en {video_dir}.")
 
     if args.audio:
         audio_path = Path(args.audio)

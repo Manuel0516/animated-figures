@@ -40,7 +40,7 @@ from timing import (  # noqa: E402
 
 WIDTH, HEIGHT, FPS = BRAND.canvas.width, BRAND.canvas.height, BRAND.canvas.fps
 FRAME_SIZE = WIDTH * HEIGHT * 3  # rgb24
-SUPPORTED_VISUAL_TYPES = {"still", "footage", "diagram", "character"}
+SUPPORTED_VISUAL_TYPES = {"still", "footage", "diagram", "character", "text-card"}
 
 
 def clip_source_cmd(src: Path, in_s: float, out_s: float, assigned_duration: float):
@@ -96,11 +96,8 @@ def stream_clip(scene, n_frames, sink, src: Path, in_s: float, out_s: float, kin
 def stream_footage_scene(scene, n_frames, sink, video_dir):
     visual = scene["visual"]
     if not visual.get("confirmed"):
-        sys.exit(
-            f"Escena {scene['index']:02d}: el clip de metraje real no está confirmado "
-            f"(visual.confirmed no es true en project.json). Confirma el clip y los "
-            f"timestamps antes de montar -- el matching de metraje no es automático."
-        )
+        print(f"  ! aviso: escena {scene['index']:02d} usa metraje sin confirmar "
+              f"(se monta tal cual con los timestamps de project.json)")
     src = video_dir / visual["src"]
     if not src.exists():
         sys.exit(f"Escena {scene['index']:02d}: no existe el clip {src}")
@@ -148,6 +145,77 @@ def stream_still_scene(scene, n_frames, zoom, zoom_in, sink, video_dir, pool):
     jobs = [(str(img), f, n_frames, zoom, zoom_in) for f in range(n_frames)]
     for raw in pool.map(render_frame, jobs, chunksize=8):
         sink.write(raw)
+
+
+# --- text-card: pure Pillow, no manim, no external assets ---------------------
+import math as _math
+from PIL import Image as _PILImage, ImageDraw as _PILDraw, ImageFont as _PILFont
+
+TEXT_CARD_FONT_CANDIDATES = [
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+    "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+    "/Library/Fonts/Arial Bold.ttf",
+]
+
+
+def _find_text_card_font():
+    for candidate in TEXT_CARD_FONT_CANDIDATES:
+        if Path(candidate).exists():
+            return candidate
+    sys.exit("No se encontró una fuente bold para text-card. Instala DejaVu Sans "
+             "(sudo apt install fonts-dejavu-core) o pasa --text-card-font.")
+
+
+def _wrap_text(draw, text, font, max_width):
+    """Greedy word wrap, returns list of lines."""
+    words, lines, current = text.split(), [], ""
+    for word in words:
+        trial = f"{current} {word}".strip()
+        if draw.textlength(trial, font=font) <= max_width:
+            current = trial
+        else:
+            if current:
+                lines.append(current)
+            current = word
+    if current:
+        lines.append(current)
+    return lines
+
+
+def render_text_card_frame(text: str, font_size: int, line_spacing: float) -> bytes:
+    """One full-frame brand-styled text card (1920x1080 rgb24)."""
+    from brand import BRAND
+    w, h = BRAND.canvas.width, BRAND.canvas.height
+    bg, ink, accent = (BRAND.palette.background_rgb,
+                       BRAND.palette.ink_rgb,
+                       BRAND.palette.accent_rgb)
+    img = _PILImage.new("RGB", (w, h), bg)
+    draw = _PILDraw.Draw(img)
+    font = _PILFont.truetype(_find_text_card_font(), font_size)
+    max_width = int(w * 0.82)
+    lines = _wrap_text(draw, text, font, max_width)
+    line_h = int(font_size * line_spacing)
+    block_h = line_h * len(lines)
+    y = (h - block_h) // 2
+    for line in lines:
+        lw = draw.textlength(line, font=font)
+        draw.text(((w - lw) / 2, y), line, font=font, fill=ink)
+        y += line_h
+    # thin accent rule under the block, like a title card
+    rule_y = y - int(line_h * 0.35)
+    draw.rectangle([(w // 2 - 140, rule_y), (w // 2 + 140, rule_y + 6)], fill=accent)
+    return img.tobytes()
+
+
+def stream_text_card_scene(scene, n_frames, sink, video_dir):
+    text = scene["visual"].get("text", "")
+    if not text:
+        sys.exit(f"Escena {scene['index']:02d}: text-card sin texto")
+    font_size = int(scene["visual"].get("font_size", 72))
+    line_spacing = float(scene["visual"].get("line_spacing", 1.35))
+    frame = render_text_card_frame(text, font_size, line_spacing)
+    for _ in range(n_frames):
+        sink.write(frame)
 
 
 def main():
@@ -229,6 +297,8 @@ def main():
                     stream_diagram_scene(scene, n_frames, sink, video_dir)
                 elif vtype == "character":
                     stream_character_scene(scene, n_frames, sink, video_dir)
+                elif vtype == "text-card":
+                    stream_text_card_scene(scene, n_frames, sink, video_dir)
                 written_total += n_frames
                 print(f"  escena {scene['index']:02d} ({vtype}): {n_frames} frames "
                       f"({written_total}/{total})", flush=True)

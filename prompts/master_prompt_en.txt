@@ -4,157 +4,116 @@ Kimi, etc.) or similar. None of these instructions depend on which
 agent or model you are — you only need to read/write files and
 run Bash commands.
 
-Your mission: create the full script for a faceless YouTube video in
-the animated curiosity channel style (like Whymentary), in English.
+Your mission: create the FULL production package for a faceless YouTube
+video in the animated curiosity channel style (like Whymentary), in the
+ENGINEERING FACTS / CURIOSITIES niche, in English. FULLY AUTONOMOUS:
+never stop to ask the user anything; from the topic to the final MP4,
+you complete every step yourself.
 
 ━━━ PART 0: PICK A TOPIC ━━━
-Generate 5 video ideas for a curiosity channel in English.
-
-Content type: questions the viewer never thought to ask, but once heard,
-they can't ignore. One topic per video, told narratively without the
-creator appearing on camera.
+Generate 6 video ideas for an engineering-curiosity channel in English.
+Type of content: questions about how things are built and why they don't
+fall apart, that the viewer never asked but can't ignore once heard.
+One topic per video, told narratively, no creator on camera.
 
 Topics that work in this niche:
-- Psychology and cognitive biases (fears, habits, irrational emotions)
-- Surprising history (facts that contradict what you learned in school)
-- Everyday science (why things you take for granted happen)
-- Human nature (sleep, memory, pain, instincts)
-- Accessible philosophy (dilemmas anyone can understand)
+- Civil engineering: bridges, skyscrapers, dams, tunnels, cranes
+- Mechanical engineering: engines, gears, bearings, hydraulics
+- Everyday engineering: why windows don't blow out, how traffic lights work
+- Materials: steel, concrete, glass, why they behave the way they do
+- Famous failures and the lessons they taught (Tacoma Narrows, Challenger)
+- Hidden infrastructure: sewers, power grids, water supply
 
 Title patterns that work:
-- "Why [everyday phenomenon nobody questions]?"
-- "The [psychological or social concept] Effect"
-- "What If [surprising but believable hypothesis]?"
-- "The Real Reason [common belief that's false]"
-- "How [mental process] Is Controlling Your Life Without You Knowing"
+- "Why the [structure] doesn't [fail]"
+- "The engineering trick behind [everyday thing]"
+- "How [structure] survives [extreme condition]"
+- "The [X] that changed engineering forever"
+- "What actually happens when [engineered thing] fails"
 
-Evaluate the 5 ideas by viral potential for a curious 25-45 audience.
+Evaluate the 6 ideas by viral potential for a curious 25-45 audience.
 Auto-pick the best one, mark it with ⭐, and proceed without waiting.
-
-If the user already gave you a topic in their message, skip this part
-and use it directly.
+If the user already gave you a topic, use it directly.
 
 ━━━ PART 1: SCRIPT ━━━
-Write the full script in neutral English on the chosen topic
-(1,200 words ≈ 8 minutes).
-
+Write the full script in English (1,100-1,300 words ≈ 7-9 minutes).
 Structure:
-• HOOK (15s): open with the most unexpected question or fact about
-  the topic. The viewer must think "I didn't know that" within 5 seconds.
-• CONTEXT (30s): why this topic matters more than it seems. Connect
-  it to something the viewer already knows.
-• BODY: 3-4 blocks of 90s each, each ending with an unexpected mini-twist.
-• FINAL FACT: save the most impactful fact for the closing.
+• HOOK (15s): the most unexpected question or fact about the topic.
+  The viewer must think "I didn't know that" within 5 seconds.
+• CONTEXT (30s): why this matters more than it seems. Connect it to
+  something the viewer already knows (a bridge they cross, a building
+  they've seen).
+• BODY: 3-4 blocks of ~90s each, each ending with an unexpected mini-twist.
+• FINAL FACT: save the most impressive fact for the closing.
 • CLOSE + CTA: 2 conclusion sentences + an open question for comments
   + like and subscribe.
-
 Rules:
 - Short sentences (8-12 words on average)
 - Second-person narrative tone (you)
 - No lists or bullets — continuous oral narration
-- Concrete, comparable facts ("10 times more than", "the equivalent of
-  filling a stadium")
+- Concrete, comparable facts ("10 times stronger than", "the equivalent
+  of filling a stadium")
+- Engineering terms must be explained in plain language the first time
+  they appear ("a truss — the lattice of triangles you see under bridges")
 - Each body block ends with: "But what nobody expected is..."
 
-━━━ PART 2: SPLIT INTO VISUAL BLOCKS ━━━
-Split the script into 4-6 second segments (~12-18 words each).
-Show them numbered like this: [01] text... [02] text... [03] text...
+━━━ PART 2: SPLIT INTO SCENES ━━━
+Split the script into scenes of 4-8 seconds (~12-20 words each). Each
+scene is ONE entry in project.json. You decide the best VISUAL for each
+scene from these types (this is an ENGINEERING channel: diagrams are
+your superpower — prefer them for anything structural, mechanical, or
+explanatory):
 
-━━━ PART 3: GENERATE THE IMAGES YOURSELF VIA SCRIPT (Bash) ━━━
-No more Magnific or MCP. You have access to a terminal (Bash). For each
-numbered segment, generate its image by running:
+1. "diagram" — a manim animation built from a declarative spec. USE FOR:
+   cross-sections, force/load diagrams, gear trains, flow paths, how
+   parts connect. Write the spec JSON yourself (see schemas/diagram.schema.json
+   and scripts/render/diagram_scene.py): nodes with labels + optional
+   Nerd Font icons, edges with labels, a reveal order. Keep specs simple:
+   2-5 nodes, 1-4 edges, reveal in 2-4 steps.
+2. "character" — a static stick figure beat ("overview, then zoom into
+   detail" transition). Spec: {"pose": "overview"|"point-right", "duration": N}.
+   Use sparingly (max 2-3 per video) as narrative punctuation.
+3. "still" — an AI-generated image in the channel's MS-Paint doodle
+   style. USE FOR: establishing shots, emotional beats, humour, scenes
+   that can't be diagrammed. Provide visual.prompt (60-120 words, very
+   specific: framing, subject, pose, objects, background — content only,
+   NO style instructions; the style is added automatically).
+4. "text-card" — bold typographic card. USE FOR: key numbers, the final
+   fact, section titles. Just provide visual.text (short, 2-6 words per
+   line, max ~4 lines).
 
-    python scripts/gen_image_gemini.py --prompt "<visual description of the segment, in English, WITHOUT style instructions>" --out output/<topic-slug>/<NN>.png
+Mix at least TWO types per video. A good ratio for engineering:
+   ~40% diagrams, ~35% stills, ~15% text-cards, ~10% characters.
 
-This is the FREE default path (Gemini "Nano Banana", free daily quota
-on Google AI Studio, same GEMINI_API_KEY as voice). If it fails due
-to quota exhaustion, or if the user asks for higher quality, use
-`scripts/gen_image.py` instead (same arguments, via OpenRouter, paid —
-seedream-4.5 by default).
+━━━ PART 3: WRITE project.json + script.txt ━━━
+Create the folder output/<topic-slug>/ and write:
+1. script.txt — the full narration text (plain text, no numbering).
+2. project.json — array of scenes, each:
+   {"index": N, "text": "<narration for this scene>",
+    "visual": {"type": "...", ...type-specific fields...}}
+   Follow schemas/project.schema.json exactly. index is 1-based, in order.
+   Text cards: visual.text is the card text (may differ slightly from
+   scene text — it's the ON-SCREEN text, keep it short).
+   Diagrams: visual.spec is a RELATIVE path like "diagrams/scene-003.json"
+   — write that spec file too, inside output/<topic-slug>/diagrams/.
+   Characters: visual.spec like "characters/scene-002.json" — write it too.
+   Stills: visual.src like "04.png" (the file run_all.py will generate).
 
-Where <topic-slug> is the chosen title in lowercase with hyphens, and
-<NN> is the two-digit segment number (01, 02, 03...). The script already
-automatically adds the required style (stick figures / MS Paint / 16:9)
-— you only pass the detailed visual content of each segment.
+━━━ PART 4: RUN THE PIPELINE ━━━
+Run the single command that does EVERYTHING (images, diagram renders,
+narration, subtitles, assembly):
 
-Rules for each image prompt — BE VERY SPECIFIC AND DETAILED, never
-a generic one-liner. Each prompt must be 3-6 sentences (60-120 words)
-covering ALL these points:
-- Framing: wide, medium, or close-up shot; what occupies the center.
-- Subject(s): exact pose, what each figure is doing, specific facial
-  expression (smiling, furrowed brows, O-mouth of surprise...),
-  position in the frame (left/center/right, foreground/background).
-- Objects: each relevant object described with its exact shape and
-  color, and where it's placed relative to the subject (above, to the
-  right, behind...). Not "a computer" — rather "a beige desktop monitor
-  with a glowing blue screen, sitting on a small two-legged wooden desk
-  to the right".
-- Background/scene: what's behind (blank wall, house silhouette, simple
-  interior...) so it's not an ambiguous void.
-- On-screen text (if applicable): the EXACT word or phrase in quotes
-  that should appear written (e.g., a sign, a screen, a banner).
-- Element relationships: how they connect visually (a dotted line, an
-  arrow, a clear distance between two elements).
-- DO NOT add generic style instructions (stick figures, MS Paint, 16:9,
-  etc.) — the script already adds those automatically for all images.
-- Each image must be understandable on its own, without reading the
-  script, as a complete and unambiguous visual explanation of its segment.
+    python scripts/run_all.py --dir output/<topic-slug> --lang en
 
-Run one command per segment, in order, one after another (you may run
-them in parallel if your environment allows it). If a command fails
-(missing OPENROUTER_API_KEY, network error, etc.), show the error and
-stop at that segment instead of continuing silently.
+If it fails, read the error, fix the cause (usually a spec field or a
+missing visual field), and re-run. run_all.py is idempotent: finished
+assets are kept, only what's missing gets (re)built.
 
-━━━ PART 4: SAVE THE SCRIPT ━━━
-Besides the images, save the full script to
-output/<topic-slug>/script.txt (to use later for voice-over) and
-the segment list with their narrated text to
-output/<topic-slug>/segments.json.
-
-━━━ PART 5: VOICE AND ASSEMBLY (Bash) ━━━
-Generate the narration with the free default engine (Microsoft Edge TTS,
-no API key, no quota):
-
-    python scripts/tts_edge.py --text-file output/<topic-slug>/script.txt --out output/<topic-slug>/narration.mp3
-
-If the user asks for higher quality/expressiveness and has
-GEMINI_API_KEY, use instead (same result, different engine):
-
-    python scripts/tts_gemini.py --text-file output/<topic-slug>/script.txt --out output/<topic-slug>/narration.wav
-
-━━━ PART 6: ANIMATED SUBTITLES ━━━
-Generate the subtitles as a standalone video with a transparent background
-(plus an .srt for uploading to YouTube):
-
-    python scripts/gen_subtitles.py --dir output/<topic-slug>
-
-This creates output/<topic-slug>/subtitles.webm (words appear ONE BY ONE,
-each with its own entrance animation, synced to the same timings as the
-images) and subtitles.srt.
-
-━━━ PART 7: CLEAN VIDEO (NO SUBTITLES) ━━━
-First assemble the clean master: images + audio, with a smooth Ken Burns
-zoom on each image alternating between zoom-in and zoom-out:
-
-    python scripts/assemble_video.py --dir output/<topic-slug> --audio output/<topic-slug>/narration.mp3
-
-(adjust --audio path to narration.wav if you used tts_gemini.py).
-Result: output/<topic-slug>/final_clean.mp4 -- no text at all.
-
-━━━ PART 8: VIDEO WITH SUBTITLES ━━━
-Overlay the subtitles onto that master. This step is fast because it does
-NOT re-render the zoom, it only re-encodes:
-
-    python scripts/burn_subtitles.py --dir output/<topic-slug>
-
-Result: output/<topic-slug>/final.mp4 -- same video with the animated
-subtitles burned in.
-
-You end up with BOTH versions: final_clean.mp4 (no subtitles) and
-final.mp4 (with subtitles).
-
-Useful options: `--zoom 1.15` for a stronger zoom, `--no-zoom` to disable
-it, `--encoder h264_videotoolbox` for hardware encoding (much faster on Mac).
-
-Start with PART 0 (or use the given topic) and proceed without stopping
-or asking for confirmation until both versions are assembled.
+━━━ PART 5: REPORT ━━━
+When done, list the outputs:
+    output/<topic-slug>/final.mp4           (with subtitles)
+    output/<topic-slug>/final_clean.mp4     (no subtitles)
+    output/<topic-slug>/subtitles.srt       (for YouTube)
+Plus the video's word count, duration, and scene breakdown (how many
+diagram/still/text-card/character scenes). Do not stop until final.mp4
+exists.

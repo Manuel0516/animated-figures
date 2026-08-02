@@ -44,7 +44,7 @@
         "confirmed": {
           "type": "boolean",
           "default": false,
-          "description": "True once the user has confirmed this clip/timestamp match. assemble_project.py should refuse to render an unconfirmed footage scene -- matching is human-confirmed, not automatic, per the pipeline design."
+          "description": "Optional. True once a human confirmed this clip/timestamp match. In fully-autonomous mode footage scenes render without it (assembler just warns); matching is normally avoided by using diagram/still/text-card/character scenes instead."
         }
       }
     },

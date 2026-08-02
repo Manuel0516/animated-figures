@@ -2,6 +2,47 @@
 
 Adaptación del sistema ["Vídeos Stickman Faceless con Claude 2026"](https://ale-ferr.notion.site/V-deos-Stickman-Faceless-con-Claude-2026-39a43d6a4e9780839821c3bdc49d1b92).
 
+## ⚡ MODO AUTÓNOMO (flujo recomendado)
+
+Pipeline totalmente automático, sin intervención humana, para el nicho de
+**curiosidades de ingeniería**, en **inglés o español**:
+
+1. Copia `prompts/master_prompt_en.txt` (inglés) o `prompts/master_prompt_es.txt`
+   (español) en tu agente de código (Claude Code, Codex, opencode, Hermes...).
+   El agente elige el tema, escribe el guión y genera `project.json` con
+   escenas de 4 tipos: `diagram` (manim), `character` (figura estática),
+   `still` (imagen IA) y `text-card` (tipografía pura).
+2. Ejecuta el driver único que lo hace TODO:
+
+   ```bash
+   python scripts/run_all.py --dir output/<slug> --lang en   # o --lang es
+   ```
+
+   `run_all.py` genera lo que falta (imágenes, clips manim, narración,
+   subtítulos) y monta `final.mp4` + `final_clean.mp4` + `subtitles.srt`.
+   Es **idempotente**: los assets ya generados se conservan.
+
+**Sin claves API:** las escenas `diagram`, `character` y `text-card` no
+necesitan ninguna API (manim + Pillow + Edge TTS gratis). Solo los `still`
+necesitan `GEMINI_API_KEY` (gratis en https://aistudio.google.com/apikey) o
+`OPENROUTER_API_KEY` (de pago). Un vídeo 100% diagramas cuesta $0.
+
+**Idiomas:** `--lang en|es` elige la voz de narración automáticamente
+(`EDGE_TTS_VOICE_EN` / `EDGE_TTS_VOICE_ES` en `.env`, por defecto
+en-US-ChristopherNeural / es-ES-AlvaroNeural). Subtítulos y SRT salen en el
+idioma del guión.
+
+**Nicho:** los prompts maestros están orientados a datos y curiosidades de
+ingeniería (puentes, motores, materiales, fallos famosos, infraestructura).
+Los diagramas manim son el superpoder del canal: secciones transversales,
+diagramas de fuerzas, trenes de engranajes, rutas de flujo.
+
+> El flujo LEGACY (imagen por segmento vía `segments.json` +
+> `assemble_video.py`) sigue funcionando; el modo autónomo usa
+> `project.json` + `assemble_project.py`.
+
+---
+
 El original usa **Claude Desktop + Magnific (vía MCP)** para las imágenes y
 **Google AI Studio manual** para la voz. Aquí todo el flujo queda scriptado:
 

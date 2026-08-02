@@ -4,147 +4,116 @@ Kimi, etc.) u otro similar. Ninguna instrucción de aquí depende de qué
 agente o modelo eres — solo necesitas poder leer/escribir archivos y
 ejecutar comandos de Bash.
 
-Tu misión: crear el guión completo de un vídeo faceless de YouTube estilo canal de curiosidades animado (como Whymentary), en español.
+Tu misión: crear el paquete de producción COMPLETO de un vídeo faceless de
+YouTube estilo canal de curiosidades animado (como Whymentary), en el nicho
+de DATOS Y CURIOSIDADES DE INGENIERÍA, en español. TOTALMENTE AUTÓNOMO:
+nunca te detengas a preguntar nada al usuario; desde el tema hasta el MP4
+final, completas cada paso tú mismo.
 
 ━━━ PARTE 0: ELIGE EL TEMA ━━━
-Genera 5 ideas de vídeo para un canal de curiosidades en español.
-
-Tipo de contenido: preguntas que el espectador nunca se planteó pero que al escucharlas no puede ignorar. Un solo tema por vídeo, contado de forma narrativa sin que el creador aparezca en cámara.
+Genera 6 ideas de vídeo para un canal de curiosidades de ingeniería en español.
+Tipo de contenido: preguntas sobre cómo se construyen las cosas y por qué no
+se caen, que el espectador nunca se planteó pero que al escucharlas no puede
+ignorar. Un solo tema por vídeo, contado de forma narrativa, sin creador en cámara.
 
 Temas que funcionan en este nicho:
-- Psicología y sesgos cognitivos (miedos, hábitos, emociones irracionales)
-- Historia sorprendente (datos que contradicen lo que aprendiste en el colegio)
-- Ciencia cotidiana (por qué pasan cosas que das por hecho cada día)
-- Naturaleza humana (sueño, memoria, dolor, instintos)
-- Filosofía accesible (dilemas que cualquiera puede entender)
+- Ingeniería civil: puentes, rascacielos, presas, túneles, grúas
+- Ingeniería mecánica: motores, engranajes, rodamientos, hidráulica
+- Ingeniería cotidiana: por qué no revientan las ventanas, cómo funcionan
+  los semáforos
+- Materiales: acero, hormigón, vidrio; por qué se comportan como se comportan
+- Fallos famosos y sus lecciones (Tacoma Narrows, Challenger)
+- Infraestructura invisible: alcantarillado, red eléctrica, suministro de agua
 
 Patrones de título que funcionan:
-- «¿Por qué [fenómeno cotidiano que nadie se ha preguntado]?»
-- «El efecto [concepto psicológico o social]»
-- «¿Qué pasaría si [hipótesis sorprendente pero creíble]?»
-- «La razón por la que [creencia común que es falsa]»
-- «Cómo [proceso mental] está controlando tu vida sin que lo sepas»
+- «Por qué el/la [estructura] no [falla]»
+- «El truco de ingeniería detrás de [cosa cotidiana]»
+- «Cómo [estructura] sobrevive a [condición extrema]»
+- «El [X] que cambió la ingeniería para siempre»
+- «Qué pasa de verdad cuando [algo ingenieril] falla»
 
-Evalúa las 5 ideas por potencial viral para una audiencia curiosa de 25-45 años. Elige la mejor automáticamente, indícala con ⭐ y continúa con ella sin esperar respuesta.
-
-Si el usuario ya te ha dado un tema en su mensaje, sáltate esta parte y úsalo directamente.
+Evalúa las 6 ideas por potencial viral para una audiencia curiosa de 25-45
+años. Elige la mejor automáticamente, indícala con ⭐ y continúa con ella
+sin esperar respuesta. Si el usuario ya te ha dado un tema, úsalo directamente.
 
 ━━━ PARTE 1: GUIÓN ━━━
-Escribe el guión completo en español neutro sobre el tema elegido (1.200 palabras ≈ 8 minutos).
-
+Escribe el guión completo en español neutro (1.100-1.300 palabras ≈ 7-9 minutos).
 Estructura:
-• HOOK (15s): abre con la pregunta o dato más inesperado del tema. El espectador debe pensar «esto no lo sabía» antes de que pasen 5 segundos.
-• CONTEXTO (30s): por qué este tema importa más de lo que parece. Conéctalo con algo que el espectador ya conoce.
-• DESARROLLO: 3-4 bloques de 90s, cada uno con un mini-giro inesperado al final.
+• HOOK (15s): la pregunta o dato más inesperado del tema. El espectador debe
+  pensar «esto no lo sabía» antes de que pasen 5 segundos.
+• CONTEXTO (30s): por qué importa más de lo que parece. Conéctalo con algo
+  que el espectador ya conoce (un puente que cruza, un edificio que ha visto).
+• DESARROLLO: 3-4 bloques de ~90s, cada uno con un mini-giro inesperado al final.
 • DATO FINAL: guarda el dato más impactante para el cierre.
-• CIERRE + CTA: 2 frases de conclusión + pregunta abierta para los comentarios + like y suscripción.
-
+• CIERRE + CTA: 2 frases de conclusión + pregunta abierta para los comentarios
+  + like y suscripción.
 Reglas:
 - Frases cortas (8-12 palabras de media)
 - Tono narrativo en segunda persona (tú)
 - Sin listas ni bullets — narrativa oral continua
-- Datos concretos y comparables («10 veces más que», «el equivalente a llenar un estadio»)
+- Datos concretos y comparables («10 veces más fuerte que», «el equivalente
+  a llenar un estadio»)
+- Explica los términos de ingeniería en lenguaje llano la primera vez que
+  aparecen («una celosía — el enrejado de triángulos que ves bajo los puentes»)
 - Cada bloque del desarrollo termina con: «Pero lo que nadie esperaba es...»
 
-━━━ PARTE 2: DIVIDE EN BLOQUES VISUALES ━━━
-Divide el guión en segmentos de 4-6 segundos (~12-18 palabras cada uno).
-Muéstralos numerados así: [01] texto... [02] texto... [03] texto...
+━━━ PARTE 2: DIVIDE EN ESCENAS ━━━
+Divide el guión en escenas de 4-8 segundos (~12-20 palabras cada una). Cada
+escena es UNA entrada de project.json. Tú decides el mejor VISUAL para cada
+escena entre estos tipos (es un canal de INGENIERÍA: los diagramas son tu
+superpoder — úsalos para todo lo estructural, mecánico o explicativo):
 
-━━━ PARTE 3: GENERA LAS IMÁGENES TÚ MISMO CON EL SCRIPT (Bash) ━━━
-Ya no hay Magnific ni MCP. Tienes acceso a un terminal (Bash). Para cada
-segmento numerado, genera su imagen ejecutando directamente:
+1. "diagram" — una animación manim construida desde un spec declarativo.
+   ÚSALO PARA: secciones transversales, diagramas de fuerzas/cargas, trenes
+   de engranajes, rutas de flujo, cómo se conectan las partes. Escribe tú el
+   spec JSON (ver schemas/diagram.schema.json y scripts/render/diagram_scene.py):
+   nodos con etiqueta + iconos Nerd Font opcionales, aristas con etiqueta,
+   y un orden de aparición (reveal). Mantén los specs simples: 2-5 nodos,
+   1-4 aristas, reveal en 2-4 pasos.
+2. "character" — una figura de palo estática (transición «visión general,
+   luego zoom al detalle»). Spec: {"pose": "overview"|"point-right", "duration": N}.
+   Úsalo con moderación (máx. 2-3 por vídeo) como puntuación narrativa.
+3. "still" — una imagen generada por IA en el estilo garabato MS-Paint del
+   canal. ÚSALO PARA: planos de establecimiento, momentos emotivos, humor,
+   escenas que no se pueden diagramar. Aporta visual.prompt (60-120 palabras,
+   muy específico: encuadre, sujeto, pose, objetos, fondo — solo contenido,
+   SIN instrucciones de estilo; el estilo lo añade el sistema automáticamente).
+4. "text-card" — tarjeta tipográfica en negrita. ÚSALO PARA: cifras clave,
+   el dato final, títulos de sección. Solo aporta visual.text (corto, 2-6
+   palabras por línea, máx. ~4 líneas).
 
-    python scripts/gen_image_gemini.py --prompt "<descripción visual del segmento, en inglés, SIN instrucciones de estilo>" --out output/<slug-del-tema>/<NN>.png
+Mezcla al menos DOS tipos por vídeo. Una buena proporción para ingeniería:
+   ~40% diagramas, ~35% stills, ~15% text-cards, ~10% characters.
 
-Este es el camino GRATIS por defecto (Gemini "Nano Banana", cuota diaria
-gratuita en Google AI Studio, misma GEMINI_API_KEY que la voz). Si falla
-por cuota agotada, o si el usuario pide más calidad, usa en su lugar
-`scripts/gen_image.py` (mismos argumentos, vía OpenRouter, de pago —
-seedream-4.5 por defecto).
+━━━ PARTE 3: ESCRIBE project.json + script.txt ━━━
+Crea la carpeta output/<slug-del-tema>/ y escribe:
+1. script.txt — el texto completo de la narración (texto plano, sin numerar).
+2. project.json — array de escenas, cada una:
+   {"index": N, "text": "<narración de esta escena>",
+    "visual": {"type": "...", ...campos específicos del tipo...}}
+   Sigue schemas/project.schema.json exactamente. index es 1-based, en orden.
+   Text-cards: visual.text es el texto EN PANTALLA (puede diferir un poco del
+   texto de la escena — es el texto visible, mantenlo corto).
+   Diagramas: visual.spec es una ruta RELATIVA como "diagrams/scene-003.json"
+   — escribe también ese archivo de spec, dentro de output/<slug>/diagrams/.
+   Characters: visual.spec como "characters/scene-002.json" — escríbelo también.
+   Stills: visual.src como "04.png" (el archivo que generará run_all.py).
 
-Donde <slug-del-tema> es el título elegido en minúsculas y con guiones, y
-<NN> es el número de segmento con dos dígitos (01, 02, 03...). El script ya
-añade automáticamente el estilo obligatorio (stick figures / MS Paint / 16:9)
-— tú solo pasas el contenido visual detallado de cada segmento.
+━━━ PARTE 4: EJECUTA EL PIPELINE ━━━
+Ejecuta el único comando que hace TODO (imágenes, renders de diagramas,
+narración, subtítulos, montaje):
 
-Reglas para el prompt de cada imagen — SÉ MUY ESPECÍFICO Y DETALLADO, nunca
-una frase genérica de una línea. Cada prompt debe tener 3-6 frases (60-120
-palabras) cubriendo TODOS estos puntos:
-- Encuadre: plano general, medio o cercano; qué ocupa el centro de la imagen.
-- Sujeto(s): pose exacta, qué está haciendo cada figura, expresión facial
-  concreta (sonriendo, con cejas fruncidas, boca en O de sorpresa...),
-  posición en el encuadre (izquierda/centro/derecha, primer plano/fondo).
-- Objetos: cada objeto relevante descrito con su forma y color exactos, y
-  dónde está colocado respecto al sujeto (encima, a la derecha, detrás...).
-  Nada de "a computer" — mejor "a beige desktop monitor with a glowing blue
-  screen, sitting on a small two-legged wooden desk to the right".
-- Fondo/escenario: qué hay detrás (pared en blanco, silueta de una casa,
-  interior simple...) para que no sea un vacío ambiguo.
-- Texto en la imagen (si aplica): la palabra o frase EXACTA entre comillas
-  que debe aparecer escrita (p. ej. un cartel, una pantalla, un banner).
-- Relación entre elementos: cómo se conectan visualmente (una línea de
-  puntos, una flecha, una distancia clara entre dos elementos).
-- NO añadas instrucciones de estilo genéricas (stick figures, MS Paint, 16:9,
-  etc.) — eso ya lo añade el script automáticamente para todas las imágenes.
-- Cada imagen debe poder entenderse sola, sin leer el guión, como una
-  explicación visual completa y sin ambigüedad de su segmento.
+    python scripts/run_all.py --dir output/<slug-del-tema> --lang es
 
-Ejecuta un comando por segmento, en orden, uno detrás de otro (puedes
-lanzarlos en paralelo si tu entorno lo permite). Si un comando falla
-(falta OPENROUTER_API_KEY, error de red, etc.), muestra el error y detente
-en ese segmento en vez de continuar silenciosamente.
+Si falla, lee el error, arregla la causa (normalmente un campo del spec o
+un visual incompleto) y vuelve a ejecutarlo. run_all.py es idempotente:
+los assets ya generados se conservan, solo se (re)construye lo que falta.
 
-━━━ PARTE 4: GUARDA EL GUIÓN ━━━
-Además de las imágenes, guarda el guión completo en
-output/<slug-del-tema>/script.txt (para usarlo luego en la voz en off) y
-la lista de segmentos con su texto narrado en
-output/<slug-del-tema>/segments.json.
-
-━━━ PARTE 5: VOZ Y MONTAJE (Bash) ━━━
-Genera la narración con el motor gratuito por defecto (Microsoft Edge TTS,
-sin API key ni cuota):
-
-    python scripts/tts_edge.py --text-file output/<slug-del-tema>/script.txt --out output/<slug-del-tema>/narration.mp3
-
-Si el usuario pide más calidad/expresividad y tiene GEMINI_API_KEY, usa en
-su lugar (mismo resultado, motor distinto):
-
-    python scripts/tts_gemini.py --text-file output/<slug-del-tema>/script.txt --out output/<slug-del-tema>/narration.wav
-
-━━━ PARTE 6: SUBTÍTULOS ANIMADOS ━━━
-Genera los subtítulos como vídeo independiente con fondo transparente
-(más un .srt para subir a YouTube):
-
-    python scripts/gen_subtitles.py --dir output/<slug-del-tema>
-
-Esto crea output/<slug-del-tema>/subtitles.webm (las palabras aparecen UNA A
-UNA, cada una con su animación de entrada, sincronizadas con los mismos
-tiempos que las imágenes) y subtitles.srt.
-
-━━━ PARTE 7: VÍDEO LIMPIO (SIN SUBTÍTULOS) ━━━
-Monta primero el máster limpio: imágenes + audio, con un zoom suave
-(Ken Burns) en cada imagen que alterna acercamiento/alejamiento:
-
-    python scripts/assemble_video.py --dir output/<slug-del-tema> --audio output/<slug-del-tema>/narration.mp3
-
-(ajusta la ruta de --audio a narration.wav si usaste tts_gemini.py).
-Resultado: output/<slug-del-tema>/final_clean.mp4 — sin nada de texto.
-
-━━━ PARTE 8: VÍDEO CON SUBTÍTULOS ━━━
-Superpón los subtítulos sobre ese máster. Este paso es rápido porque NO
-vuelve a renderizar el zoom, solo recodifica:
-
-    python scripts/burn_subtitles.py --dir output/<slug-del-tema>
-
-Resultado: output/<slug-del-tema>/final.mp4 — el mismo vídeo con los
-subtítulos animados quemados.
-
-Al terminar tendrás las DOS versiones: final_clean.mp4 (sin subtítulos) y
-final.mp4 (con subtítulos).
-
-Opciones útiles: `--zoom 1.15` para un zoom más marcado, `--no-zoom` para
-desactivarlo, `--encoder h264_videotoolbox` para codificar por hardware
-(mucho más rápido en Mac).
-
-Empieza por la PARTE 0 (o usa el tema dado) y avanza sin parar ni pedir
-confirmación hasta tener las dos versiones montadas.
+━━━ PARTE 5: INFORME ━━━
+Cuando termines, lista las salidas:
+    output/<slug-del-tema>/final.mp4           (con subtítulos)
+    output/<slug-del-tema>/final_clean.mp4     (sin subtítulos)
+    output/<slug-del-tema>/subtitles.srt       (para YouTube)
+Más el recuento de palabras del vídeo, su duración y el desglose de escenas
+(cuántas diagram/still/text-card/character). No te detengas hasta que
+final.mp4 exista.
