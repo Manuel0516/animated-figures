@@ -86,13 +86,14 @@ def main():
     stills_needed = [s for s in project if scene_visual_type(s) in IMAGE_TYPES]
     manim_needed = [s for s in project if scene_visual_type(s) in MANIM_TYPES]
 
-    # Pick image backend
+    # Pick image backend: prefer OpenRouter when its key is set (user's
+    # planned path, best style match per .env.example), else Gemini free tier.
     import os
     from dotenv import load_dotenv
     load_dotenv(ROOT / ".env")
     if args.image_path is None:
-        args.image_path = "gemini" if os.environ.get("GEMINI_API_KEY") else "openrouter"
-    image_script = SCRIPTS / ("gen_image_gemini.py" if args.image_path == "gemini" else "gen_image.py")
+        args.image_path = "openrouter" if os.environ.get("OPENROUTER_API_KEY") else "gemini"
+    image_script = SCRIPTS / ("gen_image.py" if args.image_path == "openrouter" else "gen_image_gemini.py")
 
     for scene in stills_needed:
         src = video_dir / scene["visual"]["src"]

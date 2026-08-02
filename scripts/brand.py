@@ -85,6 +85,16 @@ class Motion:
 
 
 @dataclass(frozen=True)
+class Mascot:
+    name: str
+    helmet_color: str
+
+    @property
+    def helmet_color_rgb(self) -> tuple[int, int, int]:
+        return hex_to_rgb(self.helmet_color)
+
+
+@dataclass(frozen=True)
 class Brand:
     name: str
     canvas: Canvas
@@ -92,6 +102,7 @@ class Brand:
     typography: Typography
     line: Line
     motion: Motion
+    mascot: Mascot
 
 
 @functools.lru_cache(maxsize=1)
@@ -104,6 +115,7 @@ def load_brand(path: Path = BRAND_PATH) -> Brand:
         typography=Typography(**data["typography"]),
         line=Line(**data["line"]),
         motion=Motion(**data["motion"]),
+        mascot=Mascot(**data.get("mascot", {"name": "the engineer", "helmet_color": data["palette"]["accent"]})),
     )
 
 

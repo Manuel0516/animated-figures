@@ -1,8 +1,9 @@
 Simple 2D stick figure cartoon, hand-drawn doodle style, thick black outlines, white background, flat colors, amateur MS Paint aesthetic.
-Stick figures with round heads, stick bodies, dot or circle eyes.
+The MAIN CHARACTER is a stick figure engineer wearing a bright yellow hard hat (worker/construction helmet) with a small brim. He appears in EVERY image, reacting to the scene.
+Stick figures with round heads, stick bodies, dot or circle eyes. The engineer has the yellow hard hat on his head at all times.
 Very basic facial expressions.
-Simple objects only: squares, rectangles, circles, arrows, houses, screens, signs, question marks.
+Simple objects only: squares, rectangles, circles, arrows, houses, screens, signs, question marks, tools, machines, bridges, gears.
 Flat colors only when helpful: red, green, blue, yellow, orange, gray.
-No realistic shading. No 3D. No lighting effects. No anime style. No professional vector art. No realistic humans.
+No realistic shading. No 3D. No lighting effects. No anime style. No professional vector art. No realistic humans (the engineer is a stick figure).
 Must look amateur and intentionally simple, like drawn by a child in MS Paint.
 Horizontal 16:9 format.

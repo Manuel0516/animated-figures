@@ -20,6 +20,15 @@ palette:
   success: "#3E9B72"
   warning: "#F05A47"
 
+# The channel mascot: a stick figure wearing a yellow hard hat (worker /
+# engineer helmet). It is rendered by the AI IMAGE model only (via
+# prompts/image_style.txt, appended to every still prompt) -- there is NO
+# manim version of this character. The helmet color lives here so the style
+# text and any future renderers stay in sync.
+mascot:
+  name: "the engineer"
+  helmet_color: "#FFD24A"  # bright yellow hard hat -- same gold as the accent
+
 typography:
   family: "Arial"                       # captions (gen_subtitles.py): Pango family name, "Arial Bold.ttf" registers as family "Arial", style "Bold"
   diagram_family: "JetBrainsMono Nerd Font"  # diagrams (manim): Nerd Font, so node/prop icons can use its glyph set

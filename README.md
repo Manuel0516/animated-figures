@@ -5,13 +5,19 @@ Adaptación del sistema ["Vídeos Stickman Faceless con Claude 2026"](https://al
 ## ⚡ MODO AUTÓNOMO (flujo recomendado)
 
 Pipeline totalmente automático, sin intervención humana, para el nicho de
-**curiosidades de ingeniería**, en **inglés o español**:
+**curiosidades de ingeniería**, en **inglés o español**. Vídeos de
+**~5 minutos (700-800 palabras)**.
+
+**Mascota del canal:** un **ingeniero de palo con casco amarillo brillante**
+(solo en imágenes IA — NO existe versión manim). El estilo del personaje se
+inyecta automáticamente en cada `still` vía `prompts/image_style.txt`;
+los prompts de imagen solo describen qué está haciendo el ingeniero.
 
 1. Copia `prompts/master_prompt_en.txt` (inglés) o `prompts/master_prompt_es.txt`
    (español) en tu agente de código (Claude Code, Codex, opencode, Hermes...).
-   El agente elige el tema, escribe el guión y genera `project.json` con
-   escenas de 4 tipos: `diagram` (manim), `character` (figura estática),
-   `still` (imagen IA) y `text-card` (tipografía pura).
+   El agente elige el tema, escribe el guión (5 min) y genera `project.json`
+   con escenas principalmente `still` (~80%) + `text-card` (~15%) y como
+   mucho 1-2 `diagram` manim (último recurso).
 2. Ejecuta el driver único que lo hace TODO:
 
    ```bash
@@ -22,20 +28,15 @@ Pipeline totalmente automático, sin intervención humana, para el nicho de
    subtítulos) y monta `final.mp4` + `final_clean.mp4` + `subtitles.srt`.
    Es **idempotente**: los assets ya generados se conservan.
 
-**Sin claves API:** las escenas `diagram`, `character` y `text-card` no
-necesitan ninguna API (manim + Pillow + Edge TTS gratis). Solo los `still`
-necesitan `GEMINI_API_KEY` (gratis en https://aistudio.google.com/apikey) o
-`OPENROUTER_API_KEY` (de pago). Un vídeo 100% diagramas cuesta $0.
+**Imágenes:** por defecto usa OpenRouter si hay `OPENROUTER_API_KEY`
+(modelo `seedream-4.5`, ~$0.04/img — el mejor match del estilo garabato),
+y si no, cae a Gemini `GEMINI_API_KEY` (cuota gratuita). Las escenas
+`text-card` no necesitan ninguna API.
 
 **Idiomas:** `--lang en|es` elige la voz de narración automáticamente
 (`EDGE_TTS_VOICE_EN` / `EDGE_TTS_VOICE_ES` en `.env`, por defecto
 en-US-ChristopherNeural / es-ES-AlvaroNeural). Subtítulos y SRT salen en el
 idioma del guión.
-
-**Nicho:** los prompts maestros están orientados a datos y curiosidades de
-ingeniería (puentes, motores, materiales, fallos famosos, infraestructura).
-Los diagramas manim son el superpoder del canal: secciones transversales,
-diagramas de fuerzas, trenes de engranajes, rutas de flujo.
 
 > El flujo LEGACY (imagen por segmento vía `segments.json` +
 > `assemble_video.py`) sigue funcionando; el modo autónomo usa

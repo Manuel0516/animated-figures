@@ -35,15 +35,18 @@ Evaluate the 6 ideas by viral potential for a curious 25-45 audience.
 Auto-pick the best one, mark it with ⭐, and proceed without waiting.
 If the user already gave you a topic, use it directly.
 
-━━━ PART 1: SCRIPT ━━━
-Write the full script in English (1,100-1,300 words ≈ 7-9 minutes).
+━━━ PART 1: SCRIPT (TARGET: 5 MINUTES) ━━━
+Write the full script in English. TARGET LENGTH: 700-800 words
+(≈ 5 minutes of narration). Do NOT exceed 800 words.
+
 Structure:
 • HOOK (15s): the most unexpected question or fact about the topic.
   The viewer must think "I didn't know that" within 5 seconds.
 • CONTEXT (30s): why this matters more than it seems. Connect it to
   something the viewer already knows (a bridge they cross, a building
   they've seen).
-• BODY: 3-4 blocks of ~90s each, each ending with an unexpected mini-twist.
+• BODY: 3-4 blocks of ~60-75s each, each ending with an unexpected
+  mini-twist.
 • FINAL FACT: save the most impressive fact for the closing.
 • CLOSE + CTA: 2 conclusion sentences + an open question for comments
   + like and subscribe.
@@ -59,31 +62,33 @@ Rules:
 
 ━━━ PART 2: SPLIT INTO SCENES ━━━
 Split the script into scenes of 4-8 seconds (~12-20 words each). Each
-scene is ONE entry in project.json. You decide the best VISUAL for each
-scene from these types (this is an ENGINEERING channel: diagrams are
-your superpower — prefer them for anything structural, mechanical, or
-explanatory):
+scene is ONE entry in project.json. The channel's visual identity is a
+STICK-FIGURE ENGINEER wearing a BRIGHT YELLOW HARD HAT — he appears in
+EVERY AI-generated image (the style is added automatically by the image
+script; you only describe what he is doing in the scene).
 
-1. "diagram" — a manim animation built from a declarative spec. USE FOR:
-   cross-sections, force/load diagrams, gear trains, flow paths, how
-   parts connect. Write the spec JSON yourself (see schemas/diagram.schema.json
-   and scripts/render/diagram_scene.py): nodes with labels + optional
-   Nerd Font icons, edges with labels, a reveal order. Keep specs simple:
-   2-5 nodes, 1-4 edges, reveal in 2-4 steps.
-2. "character" — a static stick figure beat ("overview, then zoom into
-   detail" transition). Spec: {"pose": "overview"|"point-right", "duration": N}.
-   Use sparingly (max 2-3 per video) as narrative punctuation.
-3. "still" — an AI-generated image in the channel's MS-Paint doodle
-   style. USE FOR: establishing shots, emotional beats, humour, scenes
-   that can't be diagrammed. Provide visual.prompt (60-120 words, very
-   specific: framing, subject, pose, objects, background — content only,
-   NO style instructions; the style is added automatically).
-4. "text-card" — bold typographic card. USE FOR: key numbers, the final
-   fact, section titles. Just provide visual.text (short, 2-6 words per
-   line, max ~4 lines).
+Choose the visual type for each scene (IMPORTANT — MANIM IS A LAST
+RESORT, KEEP IT TO A MINIMUM):
+- "still" (PREFERRED — use for ~80% of scenes): an AI-generated image in
+  the channel's MS-Paint doodle style, ALWAYS featuring the stick-figure
+  engineer with his yellow hard hat. Provide visual.prompt (60-120 words,
+  very specific: framing, what the engineer is doing, exact pose, objects,
+  background — content only, NO style instructions; the helmet + doodle
+  style are added automatically). Use stills for everything that can be
+  drawn: the engineer inspecting a bridge, pulling a gear lever, staring
+  at a crack in concrete, holding a blueprint...
+- "text-card" (use for ~15% of scenes): bold typographic card. USE FOR:
+  key numbers, the final fact, section titles. Just provide visual.text
+  (short, 2-6 words per line, max ~4 lines).
+- "diagram" (MAXIMUM 1-2 PER VIDEO, only when a still can't explain it):
+  a manim animation for something that MUST move or be shown structurally
+  (e.g. a cross-section with moving forces). Write the spec JSON yourself
+  (see schemas/diagram.schema.json): 2-5 nodes, 1-4 edges, reveal in 2-4
+  steps. Keep it minimal — manim renders are slow and the channel style is
+  image-first.
 
-Mix at least TWO types per video. A good ratio for engineering:
-   ~40% diagrams, ~35% stills, ~15% text-cards, ~10% characters.
+DO NOT use "character" scenes (manim stick figures) — the engineer
+character exists only in AI-generated stills.
 
 ━━━ PART 3: WRITE project.json + script.txt ━━━
 Create the folder output/<topic-slug>/ and write:
@@ -96,8 +101,9 @@ Create the folder output/<topic-slug>/ and write:
    scene text — it's the ON-SCREEN text, keep it short).
    Diagrams: visual.spec is a RELATIVE path like "diagrams/scene-003.json"
    — write that spec file too, inside output/<topic-slug>/diagrams/.
-   Characters: visual.spec like "characters/scene-002.json" — write it too.
    Stills: visual.src like "04.png" (the file run_all.py will generate).
+   For every still, make sure the scene text describes the engineer's
+   action so the visual.prompt can specify his pose.
 
 ━━━ PART 4: RUN THE PIPELINE ━━━
 Run the single command that does EVERYTHING (images, diagram renders,
@@ -114,6 +120,6 @@ When done, list the outputs:
     output/<topic-slug>/final.mp4           (with subtitles)
     output/<topic-slug>/final_clean.mp4     (no subtitles)
     output/<topic-slug>/subtitles.srt       (for YouTube)
-Plus the video's word count, duration, and scene breakdown (how many
-diagram/still/text-card/character scenes). Do not stop until final.mp4
-exists.
+Plus the video's word count, duration (should be ~5 minutes), and scene
+breakdown (how many still/text-card/diagram scenes). Do not stop until
+final.mp4 exists.
