@@ -145,6 +145,30 @@ def _stream_response(headers: dict, body: dict) -> str:
     return text
 
 
+def _salvage_json(text: str) -> dict | None:
+    """Parse full text, then progressively try truncating at the last N '}'s.
+
+    Handles the common failure mode: the model's output was cut off mid-JSON,
+    so the response ends without a closing brace. Tries the whole text first,
+    then cuts at the last few closing braces (up to 40 attempts, cheap).
+    """
+    import json as _json
+
+    stripped = text.strip()
+    try:
+        return _json.loads(stripped)
+    except _json.JSONDecodeError:
+        pass
+    # Find closing-brace positions from the end and try each prefix.
+    ends = [m.start() for m in re.finditer(r"\}", stripped)]
+    for end in reversed(ends[-40:]):
+        try:
+            return _json.loads(stripped[: end + 1])
+        except _json.JSONDecodeError:
+            continue
+    return None
+
+
 def generate(lang: str, topic: str | None, effort: str, model: str) -> dict:
     prompt_path = ROOT / "prompts" / f"master_prompt_{lang}.txt"
     if not prompt_path.exists():
@@ -177,10 +201,27 @@ def generate(lang: str, topic: str | None, effort: str, model: str) -> dict:
     fence = re.search(r"```(?:json)?\s*(\{.*\})\s*```", output_text, re.DOTALL)
     if fence:
         output_text = fence.group(1)
-    try:
-        return json.loads(output_text)
-    except json.JSONDecodeError as exc:
-        sys.exit(f"No pude parsear el JSON del guión: {exc}\n--- respuesta ---\n{output_text[:1500]}")
+
+    parsed = _salvage_json(output_text)
+    if parsed is not None:
+        return parsed
+
+    # Truncated/invalid JSON: retry once with a corrective instruction.
+    print("  ! JSON truncado o inválido, reintentando con instrucción de arreglo...")
+    retry_text = user_text + (
+        "\n\nYour previous output was TRUNCATED and is NOT valid JSON. "
+        "Respond again with the COMPLETE JSON object, same exact shape, "
+        "nothing before or after it. Do not abbreviate scenes."
+    )
+    body["input"] = [{"role": "user", "content": [{"type": "input_text", "text": retry_text}]}]
+    output_text = _stream_response(headers, body)
+    fence = re.search(r"```(?:json)?\s*(\{.*\})\s*```", output_text, re.DOTALL)
+    if fence:
+        output_text = fence.group(1)
+    parsed = _salvage_json(output_text)
+    if parsed is not None:
+        return parsed
+    sys.exit(f"No pude parsear el JSON del guión tras reintento.\n--- respuesta ---\n{output_text[:1500]}")
 
 
 def write_project(payload: dict, out_root: Path) -> Path:
