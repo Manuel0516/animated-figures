@@ -6,88 +6,103 @@ ejecutar comandos de Bash.
 
 Tu misión: crear el paquete de producción COMPLETO de un vídeo faceless de
 YouTube estilo canal de curiosidades animado (como Whymentary), en el nicho
-de DATOS Y CURIOSIDADES DE INGENIERÍA, en español. TOTALMENTE AUTÓNOMO:
+de INMERSIÓN EN INGENIERÍA (deep dive), en español. TOTALMENTE AUTÓNOMO:
 nunca te detengas a preguntar nada al usuario; desde el tema hasta el MP4
 final, completas cada paso tú mismo.
 
-━━━ PARTE 0: ELIGE EL TEMA ━━━
-Genera 6 ideas de vídeo para un canal de curiosidades de ingeniería en español.
-Tipo de contenido: preguntas sobre cómo se construyen las cosas y por qué no
-se caen, que el espectador nunca se planteó pero que al escucharlas no puede
-ignorar. Un solo tema por vídeo, contado de forma narrativa, sin creador en cámara.
+FORMATO DEL CANAL (innegociable):
+UNA sola curiosidad de ingeniería por vídeo, explicada en profundidad
+durante ~5 minutos. No es una lista de datos — es una INMERSIÓN en UN
+concepto de ingeniería concreto: qué es, cómo se usa, cómo funciona, por
+qué funciona y los ejemplos reales donde el espectador lo encuentra cada día.
 
-Temas que funcionan en este nicho:
-- Ingeniería civil: puentes, rascacielos, presas, túneles, grúas
-- Ingeniería mecánica: motores, engranajes, rodamientos, hidráulica
-- Ingeniería cotidiana: por qué no revientan las ventanas, cómo funcionan
-  los semáforos
-- Materiales: acero, hormigón, vidrio; por qué se comportan como se comportan
-- Fallos famosos y sus lecciones (Tacoma Narrows, Challenger)
-- Infraestructura invisible: alcantarillado, red eléctrica, suministro de agua
+━━━ PARTE 0: ELIGE EL CONCEPTO ━━━
+Genera 6 conceptos candidatos para un canal de inmersión en ingeniería en
+español. Cada concepto debe ser UNA idea/mecanismo/material de ingeniería
+específico — no un tema amplio. Buenos ejemplos:
+- «Cómo aguanta un puente colgante su carga» (tracción vs compresión)
+- «Por qué el hormigón no se agrieta bajo los rascacielos» (hormigón pretensado)
+- «Cómo comprime el aire un motor a reacción 40 veces» (ciclo de Brayton)
+- «Por qué no se aplasta un submarino en la profundidad» (casco de presión)
+- «Cómo sabe un semáforo cuándo cambiar» (espiras de inducción)
+- «Por qué una presa retiene un lago entero» (presas de gravedad vs de arco)
+- «Cómo multiplica el par una caja de cambios» (palanca a través de engranajes)
+- «Por qué las ventanas de los aviones son redondas» (concentración de tensiones)
 
-Patrones de título que funcionan:
-- «Por qué el/la [estructura] no [falla]»
-- «El truco de ingeniería detrás de [cosa cotidiana]»
-- «Cómo [estructura] sobrevive a [condición extrema]»
-- «El [X] que cambió la ingeniería para siempre»
-- «Qué pasa de verdad cuando [algo ingenieril] falla»
+El concepto debe ser: (a) explicable en ~750 palabras, (b) visible en la
+vida cotidiana o en estructuras famosas, (c) con al menos un detalle
+sorprendente que haga decir al espectador «esto no lo sabía».
 
-Evalúa las 6 ideas por potencial viral para una audiencia curiosa de 25-45
-años. Elige la mejor automáticamente, indícala con ⭐ y continúa con ella
-sin esperar respuesta. Si el usuario ya te ha dado un tema, úsalo directamente.
+Evalúa los 6 candidatos según: brecha de curiosidad (¿haría clic una
+audiencia de 25-45 años?), riqueza para inmersión (¿material suficiente
+para 5 minutos de explicación real?) y potencial visual (¿pueden mostrarlo
+las imágenes de figura de palo?). Elige el mejor automáticamente, indícalo
+con ⭐ y continúa sin esperar respuesta. Si el usuario ya te ha dado un
+concepto, úsalo directamente.
 
-━━━ PARTE 1: GUIÓN (OBJETIVO: 5 MINUTOS) ━━━
+━━━ PARTE 1: GUIÓN (OBJETIVO: 5 MINUTOS, UN SOLO CONCEPTO) ━━━
 Escribe el guión completo en español neutro. LONGITUD OBJETIVO: 700-800
 palabras (≈ 5 minutos de narración). NO superes las 800 palabras.
 
-Estructura:
-• HOOK (15s): la pregunta o dato más inesperado del tema. El espectador debe
-  pensar «esto no lo sabía» antes de que pasen 5 segundos.
-• CONTEXTO (30s): por qué importa más de lo que parece. Conéctalo con algo
-  que el espectador ya conoce (un puente que cruza, un edificio que ha visto).
-• DESARROLLO: 3-4 bloques de ~60-75s, cada uno con un mini-giro inesperado al final.
-• DATO FINAL: guarda el dato más impactante para el cierre.
-• CIERRE + CTA: 2 frases de conclusión + pregunta abierta para los comentarios
-  + like y suscripción.
+Estructura (inmersión en el ÚNICO concepto):
+• HOOK (15s): la pregunta o dato más sorprendente sobre el concepto. El
+  espectador debe pensar «esto no lo sabía» antes de que pasen 5 segundos.
+• QUÉ ES (30-45s): nombra el concepto con claridad, defínelo en una frase
+  que entendería la abuela del espectador y di dónde lo encuentra cada día.
+• CÓMO FUNCIONA (90-120s): el mecanismo, paso a paso. ¿Qué ocurre
+  físicamente? Sigue la cadena de causa y efecto. Explica la jerga en
+  lenguaje llano la primera vez que aparezca («una celosía — el enrejado
+  de triángulos que ves bajo los puentes»).
+• POR QUÉ FUNCIONA (60-90s): la física/materiales/lógica subyacente.
+  ¿Qué fuerzas intervienen? ¿Por qué este diseño y no otro? ¿Qué falla si
+  quitas una pieza?
+• EJEMPLOS REALES (60-90s): 2-3 lugares concretos donde el espectador ha
+  visto este concepto — un puente que ha cruzado, un avión en el que ha
+  volado, un edificio en el que ha estado. Haz que se sienta presente.
+• DATO FINAL + CTA (20-30s): el dato más impactante guardado para el
+  cierre + pregunta abierta para los comentarios + like y suscripción.
+
 Reglas:
 - Frases cortas (8-12 palabras de media)
 - Tono narrativo en segunda persona (tú)
 - Sin listas ni bullets — narrativa oral continua
 - Datos concretos y comparables («10 veces más fuerte que», «el equivalente
   a llenar un estadio»)
-- Explica los términos de ingeniería en lenguaje llano la primera vez que
-  aparecen («una celosía — el enrejado de triángulos que ves bajo los puentes»)
-- Cada bloque del desarrollo termina con: «Pero lo que nadie esperaba es...»
+- Un concepto, un hilo conductor: cada párrafo debe servir a la inmersión;
+  recorta todo lo que se desvíe a otro tema
+- Termina las secciones CÓMO/POR QUÉ con: «Pero lo que nadie esperaba es...»
 
 ━━━ PARTE 2: DIVIDE EN ESCENAS ━━━
 Divide el guión en escenas de 4-8 segundos (~12-20 palabras cada una). Cada
 escena es UNA entrada de project.json. La identidad visual del canal es un
-INGENIERO DE PALO con CASCO AMARILLO BRILLANTE — aparece en TODAS las imágenes
-generadas por IA (el estilo lo añade el script de imagen automáticamente;
-tú solo describes qué está haciendo en la escena).
+INGENIERO DE PALO con CASCO AMARILLO BRILLANTE — aparece en TODAS las
+imágenes generadas por IA (el estilo lo añade el script de imagen
+automáticamente; tú solo describes qué está haciendo en la escena).
 
 Elige el tipo de visual para cada escena (IMPORTANTE — MANIM ES EL ÚLTIMO
 RECURSO, REDÚCELO AL MÍNIMO):
-- "still" (PREFERIDO — úsalo en ~80% de las escenas): imagen generada por IA
-  en el estilo garabato MS-Paint del canal, SIEMPRE con el ingeniero de palo
-  y su casco amarillo. Aporta visual.prompt (60-120 palabras, muy específico:
-  encuadre, qué hace el ingeniero, pose exacta, objetos, fondo — solo
-  contenido, SIN instrucciones de estilo; el casco y el estilo garabato se
-  añaden automáticamente). Usa stills para todo lo que se pueda dibujar: el
-  ingeniero inspeccionando un puente, tirando de una palanca de engranajes,
-  mirando una grieta en el hormigón, sujetando un plano...
-- "text-card" (úsalo en ~15% de las escenas): tarjeta tipográfica en negrita.
-  ÚSALO PARA: cifras clave, el dato final, títulos de sección. Solo aporta
-  visual.text (corto, 2-6 palabras por línea, máx. ~4 líneas).
-- "diagram" (MÁXIMO 1-2 POR VÍDEO, solo cuando un still no pueda explicarlo):
-  una animación manim para algo que DEBA moverse o mostrarse estructuralmente
-  (p. ej. una sección transversal con fuerzas en movimiento). Escribe tú el
-  spec JSON (ver schemas/diagram.schema.json): 2-5 nodos, 1-4 aristas, reveal
-  en 2-4 pasos. Mantenlo mínimo — los renders manim son lentos y el estilo
-  del canal es primero-imagen.
+- "still" (PREFERIDO — úsalo en ~80% de las escenas): imagen generada por
+  IA en el estilo garabato MS-Paint del canal, SIEMPRE con el ingeniero de
+  palo y su casco amarillo. Aporta visual.prompt (60-120 palabras, muy
+  específico: encuadre, qué hace el ingeniero, pose exacta, objetos, fondo
+  — solo contenido, SIN instrucciones de estilo; el casco y el estilo
+  garabato se añaden automáticamente). Para una inmersión, el ingeniero
+  debe estar MOSTRANDO el concepto: señalando un cable de puente, tirando
+  de una palanca de engranajes, sujetando un plano de sección transversal,
+  caminando por una presa, etc.
+- "text-card" (úsalo en ~15% de las escenas): tarjeta tipográfica en
+  negrita. ÚSALO PARA: el nombre del concepto en la introducción, cifras
+  clave, el dato final, títulos de sección. Solo aporta visual.text (corto,
+  2-6 palabras por línea, máx. ~4 líneas).
+- "diagram" (MÁXIMO 1-2 POR VÍDEO, solo cuando un still no pueda
+  explicarlo): una animación manim para algo que DEBA moverse o mostrarse
+  estructuralmente (p. ej. fuerzas actuando sobre una viga). Escribe tú el
+  spec JSON (ver schemas/diagram.schema.json): 2-5 nodos, 1-4 aristas,
+  reveal en 2-4 pasos. Mantenlo mínimo — los renders manim son lentos y el
+  estilo del canal es primero-imagen.
 
-NO uses escenas "character" (figuras de palo manim) — el personaje ingeniero
-solo existe en los stills generados por IA.
+NO uses escenas "character" (figuras de palo manim) — el personaje
+ingeniero solo existe en los stills generados por IA.
 
 ━━━ PARTE 3: ESCRIBE project.json + script.txt ━━━
 Crea la carpeta output/<slug-del-tema>/ y escribe:
@@ -96,13 +111,13 @@ Crea la carpeta output/<slug-del-tema>/ y escribe:
    {"index": N, "text": "<narración de esta escena>",
     "visual": {"type": "...", ...campos específicos del tipo...}}
    Sigue schemas/project.schema.json exactamente. index es 1-based, en orden.
-   Text-cards: visual.text es el texto EN PANTALLA (puede diferir un poco del
-   texto de la escena — es el texto visible, mantenlo corto).
+   Text-cards: visual.text es el texto EN PANTALLA (puede diferir un poco
+   del texto de la escena — es el texto visible, mantenlo corto).
    Diagramas: visual.spec es una ruta RELATIVA como "diagrams/scene-003.json"
    — escribe también ese archivo de spec, dentro de output/<slug>/diagrams/.
    Stills: visual.src como "04.png" (el archivo que generará run_all.py).
-   Para cada still, asegúrate de que el texto de la escena describe la acción
-   del ingeniero para que el visual.prompt pueda especificar su pose.
+   Para cada still, asegúrate de que el texto de la escena describe la
+   acción del ingeniero para que el visual.prompt pueda especificar su pose.
 
 ━━━ PARTE 4: EJECUTA EL PIPELINE ━━━
 Ejecuta el único comando que hace TODO (imágenes, renders de diagramas,
@@ -119,6 +134,6 @@ Cuando termines, lista las salidas:
     output/<slug-del-tema>/final.mp4           (con subtítulos)
     output/<slug-del-tema>/final_clean.mp4     (sin subtítulos)
     output/<slug-del-tema>/subtitles.srt       (para YouTube)
-Más el recuento de palabras del vídeo, su duración (debe ser ~5 minutos) y
-el desglose de escenas (cuántas still/text-card/diagram). No te detengas
-hasta que final.mp4 exista.
+Más el recuento de palabras del vídeo, su duración (debe ser ~5 minutos),
+el concepto elegido y el desglose de escenas (cuántas still/text-card/
+diagram). No te detengas hasta que final.mp4 exista.

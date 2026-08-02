@@ -6,59 +6,71 @@ run Bash commands.
 
 Your mission: create the FULL production package for a faceless YouTube
 video in the animated curiosity channel style (like Whymentary), in the
-ENGINEERING FACTS / CURIOSITIES niche, in English. FULLY AUTONOMOUS:
-never stop to ask the user anything; from the topic to the final MP4,
-you complete every step yourself.
+ENGINEERING DEEP-DIVE niche, in English. FULLY AUTONOMOUS: never stop to
+ask the user anything; from the topic to the final MP4, you complete every
+step yourself.
 
-━━━ PART 0: PICK A TOPIC ━━━
-Generate 6 video ideas for an engineering-curiosity channel in English.
-Type of content: questions about how things are built and why they don't
-fall apart, that the viewer never asked but can't ignore once heard.
-One topic per video, told narratively, no creator on camera.
+CHANNEL FORMAT (non-negotiable):
+ONE single engineering curiosity per video, explained in depth for ~5
+minutes. Not a list of facts — a DEEP DIVE into ONE specific engineering
+concept: what it is, how it is used, how it works, why it works, and the
+real-life examples where the viewer meets it every day.
 
-Topics that work in this niche:
-- Civil engineering: bridges, skyscrapers, dams, tunnels, cranes
-- Mechanical engineering: engines, gears, bearings, hydraulics
-- Everyday engineering: why windows don't blow out, how traffic lights work
-- Materials: steel, concrete, glass, why they behave the way they do
-- Famous failures and the lessons they taught (Tacoma Narrows, Challenger)
-- Hidden infrastructure: sewers, power grids, water supply
+━━━ PART 0: PICK THE CONCEPT ━━━
+Generate 6 candidate concepts for an engineering deep-dive channel in
+English. Each concept must be ONE specific engineering idea/mechanism/
+material — not a broad topic. Good examples:
+- "How a suspension bridge carries its load" (tension vs compression)
+- "Why concrete doesn't crack under skyscrapers" (prestressed concrete)
+- "How a jet engine compresses air 40 times" (Brayton cycle)
+- "Why a submarine doesn't get crushed at depth" (pressure hulls)
+- "How a traffic light knows when to change" (induction loops)
+- "Why a dam holds back a whole lake" (gravity vs arch dams)
+- "How a gearbox multiplies torque" (leverage through gears)
+- "Why airplane windows are round" (stress concentration)
 
-Title patterns that work:
-- "Why the [structure] doesn't [fail]"
-- "The engineering trick behind [everyday thing]"
-- "How [structure] survives [extreme condition]"
-- "The [X] that changed engineering forever"
-- "What actually happens when [engineered thing] fails"
+The concept must be: (a) explainable in ~750 words, (b) visible in
+everyday life or famous structures, (c) with at least one surprising
+detail that makes the viewer say "I didn't know that".
 
-Evaluate the 6 ideas by viral potential for a curious 25-45 audience.
-Auto-pick the best one, mark it with ⭐, and proceed without waiting.
-If the user already gave you a topic, use it directly.
+Evaluate the 6 candidates by: curiosity gap (would a 25-45 audience click?),
+deep-dive richness (enough material for 5 minutes of real explanation),
+and visual potential (can stick-figure images show it?). Auto-pick the
+best one, mark it with ⭐, and proceed without waiting. If the user
+already gave you a concept, use it directly.
 
-━━━ PART 1: SCRIPT (TARGET: 5 MINUTES) ━━━
+━━━ PART 1: SCRIPT (TARGET: 5 MINUTES, ONE CONCEPT) ━━━
 Write the full script in English. TARGET LENGTH: 700-800 words
 (≈ 5 minutes of narration). Do NOT exceed 800 words.
 
-Structure:
-• HOOK (15s): the most unexpected question or fact about the topic.
+Structure (deep dive into the ONE concept):
+• HOOK (15s): the most surprising question or fact about the concept.
   The viewer must think "I didn't know that" within 5 seconds.
-• CONTEXT (30s): why this matters more than it seems. Connect it to
-  something the viewer already knows (a bridge they cross, a building
-  they've seen).
-• BODY: 3-4 blocks of ~60-75s each, each ending with an unexpected
-  mini-twist.
-• FINAL FACT: save the most impressive fact for the closing.
-• CLOSE + CTA: 2 conclusion sentences + an open question for comments
-  + like and subscribe.
+• WHAT IT IS (30-45s): name the concept plainly, define it in one
+  sentence the viewer's grandmother would understand, and say where
+  they meet it every day.
+• HOW IT WORKS (90-120s): the mechanism, step by step. What happens
+  physically? Follow the cause and effect chain. Explain jargon in
+  plain language the first time it appears ("a truss — the lattice of
+  triangles you see under bridges").
+• WHY IT WORKS (60-90s): the underlying physics/materials/logic.
+  Which forces are at play? Why this design and not another?
+  What fails if you remove one piece?
+• REAL-LIFE EXAMPLES (60-90s): 2-3 concrete places the viewer has seen
+  this concept — a bridge they crossed, a plane they flew, a building
+  they've been in. Make it feel present.
+• FINAL FACT + CTA (20-30s): the most impressive fact saved for the
+  close + an open question for comments + like and subscribe.
+
 Rules:
 - Short sentences (8-12 words on average)
 - Second-person narrative tone (you)
 - No lists or bullets — continuous oral narration
 - Concrete, comparable facts ("10 times stronger than", "the equivalent
   of filling a stadium")
-- Engineering terms must be explained in plain language the first time
-  they appear ("a truss — the lattice of triangles you see under bridges")
-- Each body block ends with: "But what nobody expected is..."
+- One concept, one through-line: every paragraph must serve the deep
+  dive; cut anything that drifts to a different topic
+- End the HOW/WHY sections with: "But what nobody expected is..."
 
 ━━━ PART 2: SPLIT INTO SCENES ━━━
 Split the script into scenes of 4-8 seconds (~12-20 words each). Each
@@ -74,16 +86,17 @@ RESORT, KEEP IT TO A MINIMUM):
   engineer with his yellow hard hat. Provide visual.prompt (60-120 words,
   very specific: framing, what the engineer is doing, exact pose, objects,
   background — content only, NO style instructions; the helmet + doodle
-  style are added automatically). Use stills for everything that can be
-  drawn: the engineer inspecting a bridge, pulling a gear lever, staring
-  at a crack in concrete, holding a blueprint...
+  style are added automatically). For a deep dive, the engineer should be
+  SHOWING the concept: pointing at a bridge cable, pulling a gear lever,
+  holding a cross-section diagram, walking through a dam, etc.
 - "text-card" (use for ~15% of scenes): bold typographic card. USE FOR:
-  key numbers, the final fact, section titles. Just provide visual.text
-  (short, 2-6 words per line, max ~4 lines).
+  the concept's name in the intro, key numbers, the final fact, section
+  titles. Just provide visual.text (short, 2-6 words per line, max ~4
+  lines).
 - "diagram" (MAXIMUM 1-2 PER VIDEO, only when a still can't explain it):
   a manim animation for something that MUST move or be shown structurally
-  (e.g. a cross-section with moving forces). Write the spec JSON yourself
-  (see schemas/diagram.schema.json): 2-5 nodes, 1-4 edges, reveal in 2-4
+  (e.g. forces acting on a beam). Write the spec JSON yourself (see
+  schemas/diagram.schema.json): 2-5 nodes, 1-4 edges, reveal in 2-4
   steps. Keep it minimal — manim renders are slow and the channel style is
   image-first.
 
@@ -120,6 +133,6 @@ When done, list the outputs:
     output/<topic-slug>/final.mp4           (with subtitles)
     output/<topic-slug>/final_clean.mp4     (no subtitles)
     output/<topic-slug>/subtitles.srt       (for YouTube)
-Plus the video's word count, duration (should be ~5 minutes), and scene
-breakdown (how many still/text-card/diagram scenes). Do not stop until
-final.mp4 exists.
+Plus the video's word count, duration (should be ~5 minutes), the chosen
+concept, and the scene breakdown (how many still/text-card/diagram scenes).
+Do not stop until final.mp4 exists.

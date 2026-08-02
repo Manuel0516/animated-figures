@@ -5,8 +5,11 @@ Adaptación del sistema ["Vídeos Stickman Faceless con Claude 2026"](https://al
 ## ⚡ MODO AUTÓNOMO (flujo recomendado)
 
 Pipeline totalmente automático, sin intervención humana, para el nicho de
-**curiosidades de ingeniería**, en **inglés o español**. Vídeos de
-**~5 minutos (700-800 palabras)**.
+**inmersión en ingeniería (deep dive)**: UN concepto de ingeniería por
+vídeo, explicado en profundidad durante **~5 minutos (700-800 palabras)**.
+Formato: qué es → cómo funciona → por qué funciona → ejemplos reales →
+dato final. **Idioma activo: inglés** (`--lang en`); el prompt en español
+está listo pero el canal publica en inglés por ahora.
 
 **Mascota del canal:** un **ingeniero de palo con casco amarillo brillante**
 (solo en imágenes IA — NO existe versión manim). El estilo del personaje se
