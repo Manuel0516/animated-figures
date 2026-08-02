@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Generate script.txt + project.json for one engineering deep-dive video using
-GPT-5.6-sol via the ChatGPT CODEX SUBSCRIPTION (chatgpt.com/backend-api/codex
+GPT-5.6-luna via the ChatGPT CODEX SUBSCRIPTION (chatgpt.com/backend-api/codex
 OAuth) -- NOT OpenRouter. This is the "brain" step of the pipeline: it picks
 the concept, writes the ~5-minute script, and emits the full scene plan the
 production chain (run_all.py) executes.
@@ -15,6 +15,7 @@ Usage:
     python scripts/gen_script.py --lang en                      # picks concept itself
     python scripts/gen_script.py --lang en --topic "why airplane windows are round"
     python scripts/gen_script.py --lang es
+    python scripts/gen_script.py --lang en --model gpt-5.6-sol  # override brain model
 """
 import argparse
 import base64
@@ -29,7 +30,7 @@ import requests
 ROOT = Path(__file__).resolve().parent.parent
 
 CODEX_URL = "https://chatgpt.com/backend-api/codex/responses"
-CODEX_MODEL = "gpt-5.6-sol"
+CODEX_MODEL = os.environ.get("CODEX_SCRIPT_MODEL", "gpt-5.6-luna")
 DEFAULT_REASONING_EFFORT = "medium"
 
 # The creative rules live in the master prompt (single source of truth). We
@@ -144,7 +145,7 @@ def _stream_response(headers: dict, body: dict) -> str:
     return text
 
 
-def generate(lang: str, topic: str | None, effort: str) -> dict:
+def generate(lang: str, topic: str | None, effort: str, model: str) -> dict:
     prompt_path = ROOT / "prompts" / f"master_prompt_{lang}.txt"
     if not prompt_path.exists():
         sys.exit(f"No existe {prompt_path}")
@@ -162,14 +163,14 @@ def generate(lang: str, topic: str | None, effort: str) -> dict:
         headers["ChatGPT-Account-Id"] = acct_id
 
     body = {
-        "model": CODEX_MODEL,
+        "model": model,
         "input": [{"role": "user", "content": [{"type": "input_text", "text": user_text}]}],
         "store": False,
         "reasoning": {"effort": effort, "summary": "auto"},
         "include": [],
     }
 
-    print(f"Generando guión con {CODEX_MODEL} (Codex OAuth)...")
+    print(f"Generando guión con {model} (Codex OAuth)...")
     output_text = _stream_response(headers, body)
 
     # Strip markdown fences if the model wrapped the JSON anyway.
@@ -217,10 +218,12 @@ def main():
     parser.add_argument("--lang", choices=("en", "es"), default="en")
     parser.add_argument("--topic", help="Concept to deep-dive (skips PART 0 selection).")
     parser.add_argument("--effort", choices=("low", "medium", "high"), default=DEFAULT_REASONING_EFFORT)
+    parser.add_argument("--model", default=CODEX_MODEL,
+                        help=f"Codex brain model (default: {CODEX_MODEL}, env CODEX_SCRIPT_MODEL).")
     parser.add_argument("--out", default=str(ROOT / "output"), help="Output root (default: output/).")
     args = parser.parse_args()
 
-    payload = generate(args.lang, args.topic, args.effort)
+    payload = generate(args.lang, args.topic, args.effort, args.model)
     video_dir = write_project(payload, Path(args.out))
     print(f"\n✅ Guión listo en {video_dir}")
     print(f"   Siguiente paso: python scripts/run_all.py --dir {video_dir} --lang {args.lang}")

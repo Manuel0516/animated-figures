@@ -63,6 +63,9 @@ def main():
     parser.add_argument("--voice", help="Force a specific Edge TTS voice (overrides --lang map).")
     parser.add_argument("--zoom", type=float, default=1.10, help="Ken Burns max zoom for still scenes.")
     parser.add_argument("--no-zoom", action="store_true", help="Disable Ken Burns zoom.")
+    parser.add_argument("--image-retries", type=int, default=2,
+                        help="Extra regeneration attempts per still when the image "
+                             "fails validation (default: 2 = 3 tries total).")
     parser.add_argument("--no-subtitles", action="store_true", help="Skip subtitle generation + burn (clean video only).")
     parser.add_argument("--skip-render", action="store_true",
                         help="Do not render diagrams/characters (assume clips exist).")
@@ -95,16 +98,37 @@ def main():
         args.image_path = "openrouter" if os.environ.get("OPENROUTER_API_KEY") else "gemini"
     image_script = SCRIPTS / ("gen_image.py" if args.image_path == "openrouter" else "gen_image_gemini.py")
 
+    from validate_image import check_image, improve_prompt  # noqa: E402
+
+    max_retries = args.image_retries
     for scene in stills_needed:
         src = video_dir / scene["visual"]["src"]
-        if src.exists() and src.stat().st_size > 0:
-            print(f"  = imagen ya existe: {src.name}")
-            continue
         prompt = scene["visual"].get("prompt")
         if not prompt:
             sys.exit(f"Escena {scene['index']:02d}: falta visual.prompt en project.json para generar la imagen.")
-        run([sys.executable, image_script, "--prompt", prompt, "--out", src],
-            f"imagen escena {scene['index']:02d}")
+
+        # Validate the existing file first (a previous run may have left a
+        # corrupt/blank image); regenerate ONLY this one if it fails.
+        attempt = 0
+        while True:
+            ok, reason = check_image(src)
+            if ok:
+                if attempt == 0:
+                    print(f"  = imagen OK: {src.name}")
+                else:
+                    print(f"  ✓ imagen regenerada y validada: {src.name}")
+                break
+            if attempt > 0:
+                print(f"  ! imagen sigue inválida ({reason}) — intento {attempt + 1}/{max_retries + 1}")
+            elif src.exists():
+                print(f"  ! imagen inválida ({reason}), regenerando: {src.name}")
+            if attempt >= max_retries:
+                sys.exit(f"Escena {scene['index']:02d}: {src.name} inválida tras "
+                         f"{max_retries + 1} intentos ({reason}). Revisa el prompt o la API.")
+            prompt_final = improve_prompt(prompt, reason, attempt) if attempt > 0 else prompt
+            run([sys.executable, image_script, "--prompt", prompt_final, "--out", src],
+                f"imagen escena {scene['index']:02d}" + (f" (intento {attempt + 1})" if attempt > 0 else ""))
+            attempt += 1
 
     for scene in manim_needed:
         vtype = scene_visual_type(scene)

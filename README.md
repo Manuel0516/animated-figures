@@ -16,12 +16,13 @@ está listo pero el canal publica en inglés por ahora.
 inyecta automáticamente en cada `still` vía `prompts/image_style.txt`;
 los prompts de imagen solo describen qué está haciendo el ingeniero.
 
-**El "cerebro" (guión):** se genera con **gpt-5.6-sol vía la suscripción de
+**El "cerebro" (guión):** se genera con **gpt-5.6-luna vía la suscripción de
 ChatGPT Codex** (`chatgpt.com/backend-api/codex`, OAuth) — NO OpenRouter.
 `scripts/gen_script.py` lee el master prompt, aplica el formato del canal y
 escribe `script.txt` + `project.json` (+ specs de diagrama). El token OAuth
 se lee de `~/.hermes/auth.json` (login: `hermes auth login openai-codex`) o
-de la env var `CODEX_ACCESS_TOKEN`.
+de la env var `CODEX_ACCESS_TOKEN`. El modelo por defecto se puede cambiar
+con `--model` o la env var `CODEX_SCRIPT_MODEL`.
 
 Flujo completo (2 comandos, 100% autónomo):
 
@@ -52,6 +53,15 @@ python scripts/run_all.py --dir output/<slug> --lang en
 (modelo `seedream-4.5`, ~$0.04/img — el mejor match del estilo garabato),
 y si no, cae a Gemini `GEMINI_API_KEY` (cuota gratuita). Las escenas
 `text-card` no necesitan ninguna API.
+
+**Validación de imágenes:** cada `still` se valida tras generarse
+(`scripts/validate_image.py`: tamaño, decodificación, aspecto 16:9, no en
+blanco). Si una imagen falla, se regenera SOLO esa con un prompt mejorado
+(instrucción de arreglo según el motivo del fallo), hasta
+`--image-retries` reintentos (por defecto 2 → 3 intentos). Re-ejecutar
+`run_all.py` también re-valida las imágenes existentes y regenera las que
+estén corruptas o en blanco. Chequeo standalone:
+`python scripts/validate_image.py --dir output/<slug>`.
 
 **Idiomas:** `--lang en|es` elige la voz de narración automáticamente
 (`EDGE_TTS_VOICE_EN` / `EDGE_TTS_VOICE_ES` en `.env`, por defecto
