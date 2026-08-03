@@ -12,13 +12,16 @@ Usage:
     BRAND.palette.accent_rgb      # (255, 210, 74)
 """
 import functools
+import os
 from dataclasses import dataclass
 from pathlib import Path
 
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
-BRAND_PATH = ROOT / "brand.yaml"
+BRAND_PATH = Path(os.environ.get("BRAND_FILE", "brand.yaml"))
+if not BRAND_PATH.is_absolute():
+    BRAND_PATH = ROOT / BRAND_PATH
 
 
 def hex_to_rgb(hex_color: str) -> tuple[int, int, int]:

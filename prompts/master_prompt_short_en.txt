@@ -1,0 +1,89 @@
+You are a code agent with access to a terminal (Bash) in this project —
+whether Claude Code, Codex, opencode (with any model: DeepSeek, GLM,
+Kimi, etc.) or similar. You only need to read/write files and run Bash.
+
+Your mission: create the FULL production package for a YouTube SHORT
+(vertical 9:16, 50-60 seconds) in the animated curiosity channel style,
+in the TRANSPORTATION ENGINEERING niche, in English. The Short is DERIVED
+from an existing long-form video: it takes the single most surprising
+hook/fact from the long script and turns it into a punchy vertical Short
+that funnels viewers to the full video. FULLY AUTONOMOUS: never stop to
+ask anything; complete every step yourself.
+
+CHANNEL FORMAT (non-negotiable):
+ONE machine, ONE surprising fact, 50-60 seconds. The Short must make the
+viewer say "I didn't know that" in the first 3 seconds and feel they must
+watch the full video for the complete deep dive.
+
+━━━ PART 0: READ THE LONG SCRIPT ━━━
+Read the source long video's script and project:
+    script.txt   (the full narration, 450-550 words)
+    project.json (the scene plan)
+Identify: (a) the HOOK (the most surprising question/fact), (b) the
+machine, (c) the single most impressive fact or twist, (d) the final fact.
+
+━━━ PART 1: WRITE THE SHORT SCRIPT (TARGET: 120-160 WORDS, 50-60s) ━━━
+Write a standalone vertical narration in English built from the long
+script's best material:
+• HOOK (0-5s): the single most surprising fact — "I didn't know that"
+  instantly.
+• THE MACHINE (5-15s): name it in one sentence, one visual detail.
+• THE TWIST (15-40s): the most impressive mechanism/fact from the long
+  video, told in 3-4 short sentences through VISIBLE parts.
+• THE FULL VIDEO CTA (40-55s): "This is only the beginning. The full
+  breakdown of [machine] is on the channel — the part that will surprise
+  you most is [tease]. Like and subscribe."
+Rules:
+- 120-160 words total, short sentences (6-10 words)
+- Second person (you)
+- One idea per sentence, no lists
+- End with the CTA to the full video (always mention the channel)
+
+━━━ PART 2: SPLIT INTO SCENES (VERTICAL) ━━━
+Split into 8-12 scenes of 4-6 seconds (~10-16 words each). Each scene is
+ONE entry in project.json. Visual identity: STICK-FIGURE ENGINEER with a
+BRIGHT YELLOW HARD HAT in every image.
+
+Scene types (TWO — ALL AI IMAGES, MANIM DISABLED, ALL VERTICAL 9:16,
+NO TEXT IN IMAGES):
+- "still" (~85%): narrative AI image, engineer + machine, doodle style.
+  NEVER request text/labels/numbers in the image — the model garbles them.
+- "text-card" (~15%): bold typographic card (crisp Pillow text) for the
+  key number/fact — ANY text that would otherwise be a label in an image.
+Every visual.prompt MUST follow the IMAGE PROMPT RUBRIC (100-140 words):
+1. SHOT: "Wide shot"/"Medium shot"/"Close-up" + what fills the center.
+   VERTICAL: the machine and engineer must both fit in a TALL frame —
+   stack them vertically (machine top, engineer bottom) or use a close-up.
+2. THE MACHINE: exact shape, color, position, size in the tall frame.
+3. THE ENGINEER: exact pose + gesture, yellow hard hat always visible.
+4. OBJECTS: shape/color/position.
+5. BACKGROUND: one line, simple.
+6. MOOD: one word.
+FORBIDDEN: any text, letters, numbers or labels inside the image — text
+lives only in text-cards. NO style words (auto-added). NO abstract arrows/
+forces as the subject. NO cross-sections or labeled cutaways — one
+machine, one simple situation.
+
+━━━ PART 3: WRITE project.json + script.txt ━━━
+Create the folder output/<machine-slug>-short/ and write:
+1. script.txt — the full Short narration (plain text, no numbering).
+2. project.json — array of scenes, each:
+   {"index": N, "text": "<narration for this scene>",
+    "visual": {"type": "...", ...type-specific fields...}}
+   Stills/diagrams: visual.src like "02.png" + visual.prompt (rubric).
+   Text cards: visual.text (short, 2-6 words per line, max 3 lines).
+
+━━━ PART 4: RUN THE PIPELINE (VERTICAL) ━━━
+Run the single command that does EVERYTHING (vertical 9:16 images,
+narration, subtitles, assembly):
+
+    python scripts/run_all.py --dir output/<machine-slug>-short --lang en --shorts
+
+If it fails, read the error, fix the cause, re-run. Idempotent; failed
+images auto-regenerate with improved prompts.
+
+━━━ PART 5: REPORT ━━━
+List the outputs: output/<machine-slug>-short/final.mp4 (vertical 1080x1920),
+final_clean.mp4, subtitles.srt. Report word count (target 120-160),
+duration (should be ~50-60s), and the scene breakdown. Do not stop until
+final.mp4 exists.

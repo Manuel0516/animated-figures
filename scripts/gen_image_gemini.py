@@ -28,12 +28,31 @@ DEFAULT_MODEL = os.environ.get("GEMINI_IMAGE_MODEL", "gemini-2.5-flash-image")
 API_URL_TMPL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 STYLE = (ROOT / "prompts" / "image_style.txt").read_text(encoding="utf-8").strip()
 
+ASPECTS = {"16:9": 16 / 9, "9:16": 9 / 16, "1:1": 1.0}
+
+
+def _crop_to_aspect(img, target: float):
+    """Center-crop an image to the target aspect ratio."""
+    from PIL import Image
+    w, h = img.size
+    if abs(w / h - target) <= 0.01:
+        return img
+    if w / h > target:
+        new_w = int(h * target)
+        x0 = (w - new_w) // 2
+        return img.crop((x0, 0, x0 + new_w, h))
+    new_h = int(w / target)
+    y0 = (h - new_h) // 2
+    return img.crop((0, y0, w, y0 + new_h))
+
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--prompt", required=True, help="Visual description of this segment (content only, no style instructions).")
     parser.add_argument("--out", required=True, help="Output image path, e.g. output/my-video/01.png")
     parser.add_argument("--model", default=DEFAULT_MODEL, help=f"Gemini image model id (default: {DEFAULT_MODEL})")
+    parser.add_argument("--aspect", choices=tuple(ASPECTS), default=os.environ.get("IMAGE_ASPECT", "16:9"),
+                        help=f"Aspect ratio (default: 16:9, env IMAGE_ASPECT).")
     parser.add_argument("--no-style", action="store_true", help="Skip appending the stickman/MS-Paint style block.")
     args = parser.parse_args()
 
@@ -50,7 +69,7 @@ def main():
             "contents": [{"parts": [{"text": full_prompt}]}],
             "generationConfig": {
                 "responseModalities": ["IMAGE"],
-                "imageConfig": {"aspectRatio": "16:9"},
+                "imageConfig": {"aspectRatio": args.aspect},
             },
         },
         timeout=120,
@@ -67,8 +86,13 @@ def main():
     image_bytes = base64.b64decode(image_part["inlineData"]["data"])
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_bytes(image_bytes)
-    print(f"OK -> {out_path}")
+    # Enforce the requested aspect (same post-crop as gen_image.py).
+    from PIL import Image
+    import io
+    img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+    img = _crop_to_aspect(img, ASPECTS[args.aspect])
+    img.save(out_path, "PNG")
+    print(f"OK -> {out_path} ({img.size[0]}x{img.size[1]})")
 
 
 if __name__ == "__main__":

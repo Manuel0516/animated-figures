@@ -21,6 +21,7 @@ Usage:
 """
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -36,8 +37,8 @@ DEFAULT_VOICES = {
     "es": "es-ES-AlvaroNeural",
 }
 
-IMAGE_TYPES = {"still"}
-MANIM_TYPES = {"diagram", "character"}
+IMAGE_TYPES = {"still"}  # AI-generated images only; text lives in text-cards
+MANIM_TYPES = set()      # manim disabled; stale diagram/character scenes -> text-card
 
 
 def run(cmd, label):
@@ -66,10 +67,17 @@ def main():
     parser.add_argument("--image-retries", type=int, default=2,
                         help="Extra regeneration attempts per still when the image "
                              "fails validation (default: 2 = 3 tries total).")
+    parser.add_argument("--shorts", action="store_true",
+                        help="Vertical 9:16 mode: uses brand-shorts.yaml (1080x1920) "
+                             "and generates 9:16 images.")
     parser.add_argument("--no-subtitles", action="store_true", help="Skip subtitle generation + burn (clean video only).")
     parser.add_argument("--skip-render", action="store_true",
                         help="Do not render diagrams/characters (assume clips exist).")
     args = parser.parse_args()
+
+    if args.shorts:
+        os.environ["BRAND_FILE"] = "brand-shorts.yaml"
+        os.environ["IMAGE_ASPECT"] = "9:16"
 
     if not shutil.which("ffmpeg") or not shutil.which("ffprobe"):
         sys.exit("ffmpeg/ffprobe no encontrados. Instala con: sudo apt install ffmpeg")
@@ -86,32 +94,55 @@ def main():
     project = json.loads(project_path.read_text(encoding="utf-8"))
 
     # --- 1+2+3: ensure visual assets exist -----------------------------------
+    # manim is DISABLED and AI images carry NO text. Any stale diagram/character
+    # scene (from an older project.json or a model that ignored the prompt) is
+    # converted to a text-card so the pipeline never depends on manim or on
+    # AI-rendered text.
+    converted = 0
+    for scene in project:
+        vtype = scene_visual_type(scene)
+        if vtype in ("diagram", "character"):
+            card_text = (scene.get("visual", {}).get("text")
+                         or scene.get("text", "").strip()[:60]
+                         or "ENGINEERING")
+            scene["visual"] = {"type": "text-card", "text": card_text}
+            converted += 1
+    if converted:
+        print(f"  ! {converted} escena(s) diagram/character convertidas a text-card "
+              f"(manim desactivado, sin texto en imágenes)")
+        project_path.write_text(json.dumps(project, ensure_ascii=False, indent=2), encoding="utf-8")
+
     stills_needed = [s for s in project if scene_visual_type(s) in IMAGE_TYPES]
     manim_needed = [s for s in project if scene_visual_type(s) in MANIM_TYPES]
 
     # Pick image backend: prefer OpenRouter when its key is set (user's
     # planned path, best style match per .env.example), else Gemini free tier.
-    import os
     from dotenv import load_dotenv
     load_dotenv(ROOT / ".env")
     if args.image_path is None:
         args.image_path = "openrouter" if os.environ.get("OPENROUTER_API_KEY") else "gemini"
     image_script = SCRIPTS / ("gen_image.py" if args.image_path == "openrouter" else "gen_image_gemini.py")
 
-    from validate_image import check_image, improve_prompt  # noqa: E402
+    from validate_image import check_image, check_prompt, improve_prompt  # noqa: E402
 
+    image_aspect = os.environ.get("IMAGE_ASPECT", "16:9")
     max_retries = args.image_retries
     for scene in stills_needed:
         src = video_dir / scene["visual"]["src"]
         prompt = scene["visual"].get("prompt")
         if not prompt:
             sys.exit(f"Escena {scene['index']:02d}: falta visual.prompt en project.json para generar la imagen.")
+        # The prompt itself must follow the quality rubric (>= 80 words) —
+        # a short one-liner always produces a bad image.
+        prompt_ok, prompt_note = check_prompt(prompt)
+        if not prompt_ok:
+            print(f"  ! escena {scene['index']:02d}: {prompt_note} — sigo, pero la imagen puede salir mala.")
 
         # Validate the existing file first (a previous run may have left a
         # corrupt/blank image); regenerate ONLY this one if it fails.
         attempt = 0
         while True:
-            ok, reason = check_image(src)
+            ok, reason = check_image(src, aspect=image_aspect)
             if ok:
                 if attempt == 0:
                     print(f"  = imagen OK: {src.name}")

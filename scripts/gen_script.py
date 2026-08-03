@@ -36,7 +36,10 @@ DEFAULT_REASONING_EFFORT = "medium"
 # The creative rules live in the master prompt (single source of truth). We
 # send it verbatim plus a strict JSON output contract, so the model applies
 # the channel format but returns structured data instead of creating files.
-OUTPUT_CONTRACT = """
+def _output_contract(mode: str) -> str:
+    word_target = "120-160 words (≈50-60 seconds). Do NOT exceed 160." if mode == "short" \
+        else "450-550 words (≈3 minutes). Do NOT exceed 550."
+    return f"""
 
 ━━━ OUTPUT CONTRACT (MANDATORY) ━━━
 You are NOT to create any files and NOT to run any commands. Ignore the
@@ -44,35 +47,41 @@ parts of the instructions above that tell you to write files or run
 scripts. Instead, respond with ONLY ONE valid JSON object, no markdown
 fences, no commentary before or after, with EXACTLY this shape:
 
-{
+{{
   "title": "<video title, title-pattern from PART 0>",
   "slug": "<lowercase-hyphenated slug for the folder>",
   "script": "<the FULL narration text from PART 1, plain text, no numbering>",
   "scenes": [
-    {
+    {{
       "index": 1,
       "text": "<narration for this scene>",
-      "visual": {
-        "type": "still|text-card|diagram",
+      "visual": {{
+        "type": "still|text-card",
         ...type-specific fields as specified in PART 2...
-      }
-    }
+      }}
+    }}
   ],
-  "diagram_specs": {
-    "<relative spec path like diagrams/scene-003.json>": { ...diagram spec JSON... }
-  }
-}
+  "diagram_specs": {{}}
+}}
 
 Rules for the JSON:
 - scenes must be the complete ordered list covering the whole script.
-- for "still": visual = {"type": "still", "prompt": "<60-120 word detailed
-  prompt, content only, no style words>", "src": "<NN.png>"}
-- for "text-card": visual = {"type": "text-card", "text": "<short on-screen text>"}
-- for "diagram": visual = {"type": "diagram", "spec": "diagrams/scene-NNN.json"}
-  AND include that spec under diagram_specs.
-- do NOT use "character" scenes.
+- script must be {word_target}
+- for "still": visual = {{"type": "still", "prompt": "<100-160 word scene
+  description following the IMAGE PROMPT RUBRIC in PART 2>", "src":
+  "<NN.png>"}} — every prompt MUST be 100-160 words with: shot type, the
+  machine's exact shape/color/position, the engineer's exact pose with
+  yellow hard hat, objects with shape/color/position, one-line background,
+  one-word mood. NEVER include text/labels/numbers in the image prompt.
+  Never a short one-liner.
+- for "text-card": visual = {{"type": "text-card", "text": "<short on-screen text>"}}
+- ONLY "still" and "text-card" scene types. Never "diagram" or "character".
+- diagram_specs must be an empty object {{}} (no manim, no diagrams).
 - the JSON must parse with json.loads as-is.
 """
+
+
+OUTPUT_CONTRACT = _output_contract("long")  # backward-compat default
 
 
 def _load_codex_token() -> str:
@@ -169,16 +178,31 @@ def _salvage_json(text: str) -> dict | None:
     return None
 
 
-def generate(lang: str, topic: str | None, effort: str, model: str) -> dict:
-    prompt_path = ROOT / "prompts" / f"master_prompt_{lang}.txt"
+def generate(lang: str, topic: str | None, effort: str, model: str,
+             mode: str = "long", derive_from: str | None = None) -> dict:
+    if mode == "short":
+        prompt_path = ROOT / "prompts" / f"master_prompt_short_{lang}.txt"
+    else:
+        prompt_path = ROOT / "prompts" / f"master_prompt_{lang}.txt"
     if not prompt_path.exists():
         sys.exit(f"No existe {prompt_path}")
     master = prompt_path.read_text(encoding="utf-8").strip()
 
     user_text = master
-    if topic:
+    if mode == "short" and derive_from:
+        # Include the long video's script so the Short is derived from it.
+        long_dir = Path(derive_from)
+        long_script = long_dir / "script.txt"
+        long_project = long_dir / "project.json"
+        if long_script.exists():
+            user_text += ("\n\nSOURCE LONG SCRIPT (read this, derive the Short "
+                          f"from it):\n---\n{long_script.read_text(encoding='utf-8').strip()}")
+        if long_project.exists():
+            user_text += (f"\n\nSOURCE LONG project.json:\n---\n"
+                          f"{long_project.read_text(encoding='utf-8')[:4000]}")
+    elif topic:
         user_text += f"\n\nUse this concept (skip PART 0's own selection): {topic}"
-    user_text += OUTPUT_CONTRACT
+    user_text += _output_contract(mode)
 
     token = _load_codex_token()
     headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
@@ -257,17 +281,28 @@ def write_project(payload: dict, out_root: Path) -> Path:
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--lang", choices=("en", "es"), default="en")
+    parser.add_argument("--mode", choices=("long", "short"), default="long",
+                        help="'long' = 3-min deep dive (default); 'short' = vertical "
+                             "50-60s Short derived from a long video (use --derive-from).")
     parser.add_argument("--topic", help="Concept to deep-dive (skips PART 0 selection).")
+    parser.add_argument("--derive-from", help="Path to a long video's output/ folder; "
+                                              "the Short is derived from its script.")
     parser.add_argument("--effort", choices=("low", "medium", "high"), default=DEFAULT_REASONING_EFFORT)
     parser.add_argument("--model", default=CODEX_MODEL,
                         help=f"Codex brain model (default: {CODEX_MODEL}, env CODEX_SCRIPT_MODEL).")
     parser.add_argument("--out", default=str(ROOT / "output"), help="Output root (default: output/).")
     args = parser.parse_args()
 
-    payload = generate(args.lang, args.topic, args.effort, args.model)
+    if args.mode == "short" and not args.derive_from:
+        sys.exit("--mode short necesita --derive-from <output/long-video-folder> "
+                 "para derivar el Short del vídeo largo.")
+
+    payload = generate(args.lang, args.topic, args.effort, args.model,
+                       mode=args.mode, derive_from=args.derive_from)
     video_dir = write_project(payload, Path(args.out))
+    extra = " --shorts" if args.mode == "short" else ""
     print(f"\n✅ Guión listo en {video_dir}")
-    print(f"   Siguiente paso: python scripts/run_all.py --dir {video_dir} --lang {args.lang}")
+    print(f"   Siguiente paso: python scripts/run_all.py --dir {video_dir} --lang {args.lang}{extra}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,37 @@
+# Vertical (9:16) brand profile for YouTube Shorts. Same palette, typography,
+# line and motion as brand.yaml — only the canvas is vertical. Selected by
+# setting BRAND_FILE=brand-shorts.yaml (run_all.py --shorts does this for
+# every subprocess it spawns).
+name: zero-five-projects-shorts
+
+canvas:
+  width: 1080
+  height: 1920
+  fps: 30
+
+palette:
+  background: "#0E0E10"   # near-black, matches banner/avatar
+  ink: "#F5F3EC"           # off-white line/text color
+  accent: "#FFD24A"        # gold
+  success: "#3E9B72"
+  warning: "#F05A47"
+
+mascot:
+  name: "the engineer"
+  helmet_color: "#FFD24A"  # bright yellow hard hat -- same gold as the accent
+
+typography:
+  family: "Arial"
+  diagram_family: "JetBrainsMono Nerd Font"
+  label_weight: bold
+  caption_stroke_px: 8
+
+line:
+  primary_width: 4
+  secondary_width: 2
+  node_corner_radius: 8
+  style: clean_vector
+
+motion:
+  pop_in_seconds: 0.18
+  ease: smoothstep

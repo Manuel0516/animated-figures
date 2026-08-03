@@ -30,14 +30,29 @@ from PIL import Image, ImageStat
 MIN_SIZE_BYTES = 8_000
 MIN_WIDTH = 480
 MIN_HEIGHT = 270
-ASPECT_MIN = 1.30          # 16:9 = 1.78; allow a comfortable band
-ASPECT_MAX = 2.40
+ASPECT_MIN = 1.70          # strict 16:9 (1.777): post-crop keeps 1.70-1.85
+ASPECT_MAX = 1.85
 MIN_STDDEV = 6.0           # grey-level stddev; blank frames are ~0-3
 MAX_MEAN_EDGE = 8.0        # a fully saturated frame (mean 0 or 255) is blank
 
 
-def check_image(path: Path) -> tuple[bool, str]:
-    """Return (ok, reason). ok=True means the image is usable as a still."""
+def check_prompt(prompt: str) -> tuple[bool, str]:
+    """Validate that a still/diagram prompt follows the quality rubric:
+    at least 80 words (target 100-160) — short one-liners produce bad images.
+    """
+    if not prompt or not prompt.strip():
+        return False, "prompt vacío"
+    words = len(prompt.split())
+    if words < 80:
+        return False, f"prompt demasiado corto ({words} palabras < 80): añade encuadre, máquina, pose del ingeniero, objetos, fondo"
+    return True, f"ok ({words} palabras)"
+
+
+def check_image(path: Path, aspect: str = "16:9") -> tuple[bool, str]:
+    """Return (ok, reason). ok=True means the image is usable as a still.
+    aspect: "16:9" (landscape) or "9:16" (vertical Shorts)."""
+    target = 16 / 9 if aspect == "16:9" else 9 / 16
+    tol = 0.09
     if not path.exists():
         return False, "no existe"
     size = path.stat().st_size
@@ -54,9 +69,9 @@ def check_image(path: Path) -> tuple[bool, str]:
             w, h = img.size
             if w < MIN_WIDTH or h < MIN_HEIGHT:
                 return False, f"resolución demasiado baja ({w}x{h})"
-            aspect = w / h
-            if not (ASPECT_MIN <= aspect <= ASPECT_MAX):
-                return False, f"aspecto fuera de rango ({w}x{h} = {aspect:.2f})"
+            aspect_ratio = w / h
+            if not (target - tol <= aspect_ratio <= target + tol):
+                return False, f"aspecto fuera de rango ({w}x{h} = {aspect_ratio:.2f})"
             # blank check on a small downscaled greyscale version
             small = img.convert("L").resize((64, 36))
     except Exception as exc:

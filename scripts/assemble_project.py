@@ -112,13 +112,24 @@ def diagram_clip_path(scene, video_dir) -> Path:
 
 
 def stream_diagram_scene(scene, n_frames, sink, video_dir):
+    """Diagram scenes are AI-generated images (manim disabled): the scene's
+    visual carries `src` (an image file), and it renders exactly like a
+    still with Ken Burns zoom. Falls back to the manim clip only if a
+    legacy rendered clip exists (diagrams/scene-NNN.mp4).
+    """
+    visual = scene["visual"]
+    img = video_dir / visual.get("src", "")
+    if img.exists():
+        stream_still_scene(scene, n_frames, 1.10, True, sink, video_dir, None)
+        return
     clip = diagram_clip_path(scene, video_dir)
-    if not clip.exists():
-        spec = video_dir / scene["visual"].get("spec", "?")
-        sys.exit(f"Escena {scene['index']:02d}: diagrama sin renderizar (falta {clip}).\n"
-                 f"Renderízalo con: python scripts/render_diagram.py --spec {spec} --out {clip}")
-    clip_duration = ffprobe_duration(clip)
-    stream_clip(scene, n_frames, sink, clip, 0.0, clip_duration, kind="diagrama")
+    if clip.exists():
+        clip_duration = ffprobe_duration(clip)
+        stream_clip(scene, n_frames, sink, clip, 0.0, clip_duration, kind="diagrama")
+        return
+    sys.exit(f"Escena {scene['index']:02d}: diagram sin imagen AI (visual.src) "
+             f"ni clip manim ({clip}).")
+
 
 
 def character_clip_path(scene, video_dir) -> Path:
@@ -143,8 +154,12 @@ def stream_still_scene(scene, n_frames, zoom, zoom_in, sink, video_dir, pool):
     if not img.exists():
         sys.exit(f"Escena {scene['index']:02d}: falta la imagen {img}")
     jobs = [(str(img), f, n_frames, zoom, zoom_in) for f in range(n_frames)]
-    for raw in pool.map(render_frame, jobs, chunksize=8):
-        sink.write(raw)
+    if pool is not None:
+        for raw in pool.map(render_frame, jobs, chunksize=8):
+            sink.write(raw)
+    else:
+        for job in jobs:
+            sink.write(render_frame(job))
 
 
 # --- text-card: pure Pillow, no manim, no external assets ---------------------

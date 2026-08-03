@@ -36,18 +36,25 @@ python scripts/run_all.py --dir output/<slug> --lang en
 
 1. Copia `prompts/master_prompt_en.txt` (inglés) o `prompts/master_prompt_es.txt`
    (español) en tu agente de código (Claude Code, Codex, opencode, Hermes...).
-   El agente elige el tema, escribe el guión (5 min) y genera `project.json`
-   con escenas principalmente `still` (~80%) + `text-card` (~15%) y como
-   mucho 1-2 `diagram` manim (último recurso).
+   El agente elige el tema, escribe el guión (3 min) y genera `project.json`
+   con escenas de DOS tipos: `still` (~85%, imagen IA 100% visual) y
+   `text-card` (~15%, tipografía Pillow nítida).
 2. Ejecuta el driver único que lo hace TODO:
 
    ```bash
    python scripts/run_all.py --dir output/<slug> --lang en   # o --lang es
    ```
 
-   `run_all.py` genera lo que falta (imágenes, clips manim, narración,
-   subtítulos) y monta `final.mp4` + `final_clean.mp4` + `subtitles.srt`.
+   `run_all.py` genera lo que falta (imágenes, narración, subtítulos) y
+   monta `final.mp4` + `final_clean.mp4` + `subtitles.srt`.
    Es **idempotente**: los assets ya generados se conservan.
+
+**Regla de oro del diseño:** las imágenes IA son 100% visuales — NUNCA
+llevan texto, etiquetas ni números (los modelos de imagen los garabatean).
+Todo el texto (nombres, cifras, etiquetas) vive en las escenas `text-card`,
+que se renderizan con Pillow y salen nítidas. Manim está desactivado; las
+escenas `diagram`/`character` antiguas se convierten automáticamente a
+text-card.
 
 **Imágenes:** por defecto usa OpenRouter si hay `OPENROUTER_API_KEY`
 (modelo `seedream-4.5`, ~$0.04/img — el mejor match del estilo garabato),

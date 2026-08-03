@@ -6,106 +6,128 @@ ejecutar comandos de Bash.
 
 Tu misión: crear el paquete de producción COMPLETO de un vídeo faceless de
 YouTube estilo canal de curiosidades animado (como Whymentary), en el nicho
-de INMERSIÓN EN INGENIERÍA (deep dive), en español. TOTALMENTE AUTÓNOMO:
-nunca te detengas a preguntar nada al usuario; desde el tema hasta el MP4
-final, completas cada paso tú mismo.
+de INGENIERÍA DEL TRANSPORTE, en español. TOTALMENTE AUTÓNOMO: nunca te
+detengas a preguntar nada al usuario; desde el tema hasta el MP4 final,
+completas cada paso tú mismo.
 
 FORMATO DEL CANAL (innegociable):
-UNA sola curiosidad de ingeniería por vídeo, explicada en profundidad
-durante ~5 minutos. No es una lista de datos — es una INMERSIÓN en UN
-concepto de ingeniería concreto: qué es, cómo se usa, cómo funciona, por
-qué funciona y los ejemplos reales donde el espectador lo encuentra cada día.
+UNA sola máquina o sistema de transporte por vídeo (avión, tren, barco,
+cohete, submarino, helicóptero, coche, grúa, ascensor...), explicado en
+profundidad durante ~3 minutos. Una INMERSIÓN en cómo funciona, por qué
+funciona y dónde lo encuentra el espectador. Cada imagen debe ser un
+OBJETO CONCRETO Y RECONOCIBLE — el modelo de imagen IA dibuja muy bien
+máquinas icónicas (aviones, trenes, barcos) pero FALLA con diagramas
+abstractos (vectores de fuerza, par, tensión). Por eso el guión debe
+escribirse en torno a cosas VISIBLES Y DIBUJABLES.
 
-━━━ PARTE 0: ELIGE EL CONCEPTO ━━━
-Genera 6 conceptos candidatos para un canal de inmersión en ingeniería en
-español. Cada concepto debe ser UNA idea/mecanismo/material de ingeniería
-específico — no un tema amplio. Buenos ejemplos:
-- «Cómo aguanta un puente colgante su carga» (tracción vs compresión)
-- «Por qué el hormigón no se agrieta bajo los rascacielos» (hormigón pretensado)
-- «Cómo comprime el aire un motor a reacción 40 veces» (ciclo de Brayton)
-- «Por qué no se aplasta un submarino en la profundidad» (casco de presión)
-- «Cómo sabe un semáforo cuándo cambiar» (espiras de inducción)
-- «Por qué una presa retiene un lago entero» (presas de gravedad vs de arco)
-- «Cómo multiplica el par una caja de cambios» (palanca a través de engranajes)
-- «Por qué las ventanas de los aviones son redondas» (concentración de tensiones)
+━━━ PARTE 0: ELIGE LA MÁQUINA ━━━
+Genera 6 máquinas/sistemas candidatos para un canal de inmersión en
+ingeniería del transporte en español. Cada candidato debe ser UNA máquina
+o sistema específico que el espectador conozca de vista:
+- «Cómo convierte un motor a reacción el combustible en empuje»
+- «Por qué un submarino puede sumergirse y salir a flote»
+- «Cómo flota un tren de levitación magnética»
+- «Por qué no vuelca un carguero»
+- «Cómo se mantiene quieto un helicóptero»
+- «Cómo se orienta un cohete en el espacio»
+- «Por qué las alas de un avión tienen esa forma»
+- «Cómo toma las curvas un tren bala a 300 km/h»
+- «Cómo levanta una grúa mil toneladas»
+- «Por qué un aerodeslizador viaja sobre aire»
 
-El concepto debe ser: (a) explicable en ~750 palabras, (b) visible en la
-vida cotidiana o en estructuras famosas, (c) con al menos un detalle
-sorprendente que haga decir al espectador «esto no lo sabía».
+El candidato debe ser: (a) explicable en ~500 palabras, (b) una máquina
+que el espectador haya VISTO (silueta reconocible), (c) con al menos un
+detalle sorprendente. EVITA todo lo que requiera diagramas abstractos
+(relaciones de engranajes, vectores de fuerza, concentración de tensiones)
+— las imágenes deben poder dibujarse como un avión/tren/barco/etc. con el
+ingeniero cerca.
 
-Evalúa los 6 candidatos según: brecha de curiosidad (¿haría clic una
-audiencia de 25-45 años?), riqueza para inmersión (¿material suficiente
-para 5 minutos de explicación real?) y potencial visual (¿pueden mostrarlo
-las imágenes de figura de palo?). Elige el mejor automáticamente, indícalo
-con ⭐ y continúa sin esperar respuesta. Si el usuario ya te ha dado un
-concepto, úsalo directamente.
+Evalúa los 6 candidatos según: brecha de curiosidad, riqueza para
+inmersión y CONCRECIÓN VISUAL (¿puede el modelo de imagen dibujar la
+máquina + una situación clara en estilo garabato?). Elige el mejor
+automáticamente, indícalo con ⭐ y continúa sin esperar respuesta. Si el
+usuario ya te ha dado una máquina, úsala.
 
-━━━ PARTE 1: GUIÓN (OBJETIVO: 5 MINUTOS, UN SOLO CONCEPTO) ━━━
-Escribe el guión completo en español neutro. LONGITUD OBJETIVO: 700-800
-palabras (≈ 5 minutos de narración). NO superes las 800 palabras.
+━━━ PARTE 1: GUIÓN (OBJETIVO: 3 MINUTOS) ━━━
+Escribe el guión completo en español neutro. LONGITUD OBJETIVO: 450-550
+palabras (≈ 3 minutos de narración). NO superes las 550 palabras.
 
-Estructura (inmersión en el ÚNICO concepto):
-• HOOK (15s): la pregunta o dato más sorprendente sobre el concepto. El
-  espectador debe pensar «esto no lo sabía» antes de que pasen 5 segundos.
-• QUÉ ES (30-45s): nombra el concepto con claridad, defínelo en una frase
-  que entendería la abuela del espectador y di dónde lo encuentra cada día.
-• CÓMO FUNCIONA (90-120s): el mecanismo, paso a paso. ¿Qué ocurre
-  físicamente? Sigue la cadena de causa y efecto. Explica la jerga en
-  lenguaje llano la primera vez que aparezca («una celosía — el enrejado
-  de triángulos que ves bajo los puentes»).
-• POR QUÉ FUNCIONA (60-90s): la física/materiales/lógica subyacente.
-  ¿Qué fuerzas intervienen? ¿Por qué este diseño y no otro? ¿Qué falla si
-  quitas una pieza?
-• EJEMPLOS REALES (60-90s): 2-3 lugares concretos donde el espectador ha
-  visto este concepto — un puente que ha cruzado, un avión en el que ha
-  volado, un edificio en el que ha estado. Haz que se sienta presente.
-• DATO FINAL + CTA (20-30s): el dato más impactante guardado para el
-  cierre + pregunta abierta para los comentarios + like y suscripción.
+Estructura (inmersión en UNA máquina):
+• HOOK (12s): la pregunta o dato más sorprendente. «Esto no lo sabía» en
+  menos de 5 segundos.
+• QUÉ ES (20s): nombra la máquina con claridad, defínela en una frase que
+  cualquiera entienda y di dónde la encuentra el espectador.
+• CÓMO FUNCIONA (60-75s): el mecanismo, paso a paso, contado a través de
+  partes VISIBLES (alas, motores, hélices, tanques de lastre, ruedas).
+  Explica la jerga en lenguaje llano la primera vez que aparezca.
+• POR QUÉ FUNCIONA (30-45s): la física/materiales en UNA idea, conectada
+  con algo visible («el ala es curva para que el aire de arriba vaya más
+  rápido»).
+• MOMENTOS REALES (30-45s): 2-3 lugares concretos donde el espectador lo
+  ha visto — el avión en el que ha volado, el tren que ha tomado.
+• DATO FINAL + CTA (15s): el dato más impactante + pregunta abierta para
+  los comentarios + like y suscripción.
 
 Reglas:
 - Frases cortas (8-12 palabras de media)
 - Tono narrativo en segunda persona (tú)
 - Sin listas ni bullets — narrativa oral continua
-- Datos concretos y comparables («10 veces más fuerte que», «el equivalente
-  a llenar un estadio»)
-- Un concepto, un hilo conductor: cada párrafo debe servir a la inmersión;
-  recorta todo lo que se desvíe a otro tema
+- Datos concretos y comparables («10 veces más fuerte que», «un campo de
+  fútbol de largo»)
+- CADA mecanismo debe describirse a través de una parte visible y
+  dibujable — nunca solo con fuerzas abstractas
 - Termina las secciones CÓMO/POR QUÉ con: «Pero lo que nadie esperaba es...»
 
 ━━━ PARTE 2: DIVIDE EN ESCENAS ━━━
-Divide el guión en escenas de 4-8 segundos (~12-20 palabras cada una). Cada
-escena es UNA entrada de project.json. La identidad visual del canal es un
-INGENIERO DE PALO con CASCO AMARILLO BRILLANTE — aparece en TODAS las
-imágenes generadas por IA (el estilo lo añade el script de imagen
-automáticamente; tú solo describes qué está haciendo en la escena).
+Divide el guión en escenas de 4-8 segundos (~12-20 palabras cada una).
+Cada escena es UNA entrada de project.json. La identidad visual del canal
+es un INGENIERO DE PALO con CASCO AMARILLO BRILLANTE — aparece en TODAS las
+imágenes generadas por IA, reaccionando o explicando la máquina.
 
-Elige el tipo de visual para cada escena (IMPORTANTE — MANIM ES EL ÚLTIMO
-RECURSO, REDÚCELO AL MÍNIMO):
-- "still" (PREFERIDO — úsalo en ~80% de las escenas): imagen generada por
-  IA en el estilo garabato MS-Paint del canal, SIEMPRE con el ingeniero de
-  palo y su casco amarillo. Aporta visual.prompt (60-120 palabras, muy
-  específico: encuadre, qué hace el ingeniero, pose exacta, objetos, fondo
-  — solo contenido, SIN instrucciones de estilo; el casco y el estilo
-  garabato se añaden automáticamente). Para una inmersión, el ingeniero
-  debe estar MOSTRANDO el concepto: señalando un cable de puente, tirando
-  de una palanca de engranajes, sujetando un plano de sección transversal,
-  caminando por una presa, etc.
+Elige el tipo de visual para cada escena (DOS TIPOS — MANIM DESACTIVADO,
+LAS IMÁGENES IA SON 100% VISUALES, SIN TEXTO EN LAS IMÁGENES):
+- "still" (úsalo en ~85% de las escenas): imagen narrativa generada por IA
+  en el estilo garabato MS-Paint del canal, SIEMPRE con el ingeniero de
+  palo con su casco amarillo y la MÁQUINA. ÚSALO PARA: la máquina en su
+  entorno, el ingeniero inspeccionándola, momentos reales, humor. NUNCA
+  pidas texto, etiquetas o números dentro de la imagen — los modelos de
+  imagen IA garabatean el texto. Si una escena necesita un número/nombre/
+  etiqueta, hazla text-card.
 - "text-card" (úsalo en ~15% de las escenas): tarjeta tipográfica en
-  negrita. ÚSALO PARA: el nombre del concepto en la introducción, cifras
-  clave, el dato final, títulos de sección. Solo aporta visual.text (corto,
-  2-6 palabras por línea, máx. ~4 líneas).
-- "diagram" (MÁXIMO 1-2 POR VÍDEO, solo cuando un still no pueda
-  explicarlo): una animación manim para algo que DEBA moverse o mostrarse
-  estructuralmente (p. ej. fuerzas actuando sobre una viga). Escribe tú el
-  spec JSON (ver schemas/diagram.schema.json): 2-5 nodos, 1-4 aristas,
-  reveal en 2-4 pasos. Mantenlo mínimo — los renders manim son lentos y el
-  estilo del canal es primero-imagen.
+  negrita (renderizada con Pillow, texto nítido). ÚSALO PARA: el nombre de
+  la máquina en la introducción, cifras clave, el dato final, títulos de
+  sección, CUALQUIER texto que de otro modo sería una etiqueta en una
+  imagen. Solo aporta visual.text (corto, 2-6 palabras por línea, máx. ~4
+  líneas).
 
-NO uses escenas "character" (figuras de palo manim) — el personaje
-ingeniero solo existe en los stills generados por IA.
+NO uses escenas "diagram" ni "character" y NUNCA pidas texto dentro de las
+imágenes IA — el texto vive solo en las text-cards.
+
+━━━ RÚBRICA DE PROMPT DE IMAGEN (CRÍTICO — cada prompt still debe seguir
+esta estructura, 100-160 palabras, SIN TEXTO EN LA IMAGEN) ━━━
+Escribe cada visual.prompt como una descripción precisa de escena:
+1. ENCUADRE: «Plano general» / «Plano medio» / «Primer plano» — y qué
+   ocupa el centro.
+2. LA MÁQUINA: nómbrala, su forma exacta, color, tamaño relativo al
+   encuadre, dónde está (izquierda/derecha/centro, primer plano/fondo).
+   Descríbela como la dibujaría un niño: «un avión de pasajeros blanco con
+   dos motores bajo las alas, visto de perfil».
+3. EL INGENIERO: qué está haciendo — pose y gesto exactos («señala el ala
+   con el brazo izquierdo levantado», «arrodillado junto al tren de
+   aterrizaje con una llave inglesa»), su casco amarillo siempre visible.
+4. OBJETOS/DETALLES: cada objeto visible con forma, color y posición
+   («un pequeño camión cisterna rojo aparcado bajo el ala»).
+5. FONDO: una línea, simple («pista vacía, cielo azul», «hangar gris»).
+6. ÁNIMO: una palabra («curioso», «impresionado», «sorprendido»).
+PROHIBIDO: cualquier texto, letra, número, etiqueta o palabra dentro de la
+imagen — el modelo los garabatea. Cualquier texto va en una escena
+text-card. Sin palabras de estilo (MS Paint, figura de palo, garabato) —
+el estilo se añade automáticamente. Sin flechas/fuerzas/vectores
+abstractos como tema. Sin secciones transversales ni cortes etiquetados —
+mantén las escenas simples y legibles: una máquina, una situación.
 
 ━━━ PARTE 3: ESCRIBE project.json + script.txt ━━━
-Crea la carpeta output/<slug-del-tema>/ y escribe:
+Crea la carpeta output/<slug-de-la-maquina>/ y escribe:
 1. script.txt — el texto completo de la narración (texto plano, sin numerar).
 2. project.json — array de escenas, cada una:
    {"index": N, "text": "<narración de esta escena>",
@@ -113,27 +135,26 @@ Crea la carpeta output/<slug-del-tema>/ y escribe:
    Sigue schemas/project.schema.json exactamente. index es 1-based, en orden.
    Text-cards: visual.text es el texto EN PANTALLA (puede diferir un poco
    del texto de la escena — es el texto visible, mantenlo corto).
-   Diagramas: visual.spec es una ruta RELATIVA como "diagrams/scene-003.json"
-   — escribe también ese archivo de spec, dentro de output/<slug>/diagrams/.
-   Stills: visual.src como "04.png" (el archivo que generará run_all.py).
-   Para cada still, asegúrate de que el texto de la escena describe la
-   acción del ingeniero para que el visual.prompt pueda especificar su pose.
+   Stills/diagramas: visual.src como "04.png" (el archivo que generará
+   run_all.py) + visual.prompt siguiendo la RÚBRICA DE PROMPT DE IMAGEN.
 
 ━━━ PARTE 4: EJECUTA EL PIPELINE ━━━
-Ejecuta el único comando que hace TODO (imágenes, renders de diagramas,
-narración, subtítulos, montaje):
+Ejecuta el único comando que hace TODO (imágenes, narración, subtítulos,
+montaje):
 
-    python scripts/run_all.py --dir output/<slug-del-tema> --lang es
+    python scripts/run_all.py --dir output/<slug-de-la-maquina> --lang es
 
-Si falla, lee el error, arregla la causa (normalmente un campo del spec o
-un visual incompleto) y vuelve a ejecutarlo. run_all.py es idempotente:
-los assets ya generados se conservan, solo se (re)construye lo que falta.
+Si falla, lee el error, arregla la causa (normalmente un campo visual
+faltante o un prompt malo) y vuelve a ejecutarlo. run_all.py es
+idempotente: los assets ya generados se conservan, solo se (re)construye
+lo que falta. Las imágenes que fallan la validación se regeneran
+automáticamente con un prompt mejorado.
 
 ━━━ PARTE 5: INFORME ━━━
 Cuando termines, lista las salidas:
-    output/<slug-del-tema>/final.mp4           (con subtítulos)
-    output/<slug-del-tema>/final_clean.mp4     (sin subtítulos)
-    output/<slug-del-tema>/subtitles.srt       (para YouTube)
-Más el recuento de palabras del vídeo, su duración (debe ser ~5 minutos),
-el concepto elegido y el desglose de escenas (cuántas still/text-card/
-diagram). No te detengas hasta que final.mp4 exista.
+    output/<slug-de-la-maquina>/final.mp4           (con subtítulos)
+    output/<slug-de-la-maquina>/final_clean.mp4     (sin subtítulos)
+    output/<slug-de-la-maquina>/subtitles.srt       (para YouTube)
+Más el recuento de palabras (objetivo 450-550), la duración (debe ser ~3
+minutos), la máquina elegida y el desglose de escenas (cuántas
+still/diagram/text-card). No te detengas hasta que final.mp4 exista.

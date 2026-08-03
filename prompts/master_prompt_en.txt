@@ -6,105 +6,122 @@ run Bash commands.
 
 Your mission: create the FULL production package for a faceless YouTube
 video in the animated curiosity channel style (like Whymentary), in the
-ENGINEERING DEEP-DIVE niche, in English. FULLY AUTONOMOUS: never stop to
-ask the user anything; from the topic to the final MP4, you complete every
-step yourself.
+TRANSPORTATION ENGINEERING niche, in English. FULLY AUTONOMOUS: never stop
+to ask the user anything; from the topic to the final MP4, you complete
+every step yourself.
 
 CHANNEL FORMAT (non-negotiable):
-ONE single engineering curiosity per video, explained in depth for ~5
-minutes. Not a list of facts — a DEEP DIVE into ONE specific engineering
-concept: what it is, how it is used, how it works, why it works, and the
-real-life examples where the viewer meets it every day.
+ONE single transportation machine or system per video (plane, train, ship,
+rocket, submarine, helicopter, car, crane, elevator...), explained in depth
+for ~3 minutes. A DEEP DIVE into how it works, why it works, and where the
+viewer meets it. Every image must be a CONCRETE, RECOGNIZABLE object — the
+AI image model draws iconic machines (planes, trains, ships) extremely well
+but FAILS at abstract diagrams (force vectors, torque, stress). So the
+script must be written around VISIBLE, DRAWABLE things.
 
-━━━ PART 0: PICK THE CONCEPT ━━━
-Generate 6 candidate concepts for an engineering deep-dive channel in
-English. Each concept must be ONE specific engineering idea/mechanism/
-material — not a broad topic. Good examples:
-- "How a suspension bridge carries its load" (tension vs compression)
-- "Why concrete doesn't crack under skyscrapers" (prestressed concrete)
-- "How a jet engine compresses air 40 times" (Brayton cycle)
-- "Why a submarine doesn't get crushed at depth" (pressure hulls)
-- "How a traffic light knows when to change" (induction loops)
-- "Why a dam holds back a whole lake" (gravity vs arch dams)
-- "How a gearbox multiplies torque" (leverage through gears)
-- "Why airplane windows are round" (stress concentration)
+━━━ PART 0: PICK THE MACHINE ━━━
+Generate 6 candidate machines/systems for a transportation-engineering
+deep-dive channel in English. Each candidate must be ONE specific machine
+or system that the viewer knows by sight:
+- "How a jet engine turns fuel into thrust"
+- "Why a submarine can dive and surface"
+- "How a maglev train floats"
+- "Why a cargo ship doesn't tip over"
+- "How a helicopter hovers"
+- "How a rocket steers in space"
+- "Why a plane's wings have that shape"
+- "How a bullet train corners at 300 km/h"
+- "How a crane lifts a thousand tons"
+- "Why a hovercraft rides on air"
 
-The concept must be: (a) explainable in ~750 words, (b) visible in
-everyday life or famous structures, (c) with at least one surprising
-detail that makes the viewer say "I didn't know that".
+The candidate must be: (a) explainable in ~500 words, (b) a machine the
+viewer has SEEN (recognizable silhouette), (c) with at least one
+surprising detail. AVOID anything requiring abstract diagrams (gear ratios,
+force vectors, stress concentration) — the images must be drawable as a
+plane/train/ship/etc. with the engineer nearby.
 
-Evaluate the 6 candidates by: curiosity gap (would a 25-45 audience click?),
-deep-dive richness (enough material for 5 minutes of real explanation),
-and visual potential (can stick-figure images show it?). Auto-pick the
-best one, mark it with ⭐, and proceed without waiting. If the user
-already gave you a concept, use it directly.
+Evaluate the 6 candidates by: curiosity gap, deep-dive richness, and
+VISUAL CONCRETENESS (can the image model draw the machine + a clear
+situation in doodle style?). Auto-pick the best, mark it with ⭐, and
+proceed without waiting. If the user already gave you a machine, use it.
 
-━━━ PART 1: SCRIPT (TARGET: 5 MINUTES, ONE CONCEPT) ━━━
-Write the full script in English. TARGET LENGTH: 700-800 words
-(≈ 5 minutes of narration). Do NOT exceed 800 words.
+━━━ PART 1: SCRIPT (TARGET: 3 MINUTES) ━━━
+Write the full script in English. TARGET LENGTH: 450-550 words
+(≈ 3 minutes of narration). Do NOT exceed 550 words.
 
-Structure (deep dive into the ONE concept):
-• HOOK (15s): the most surprising question or fact about the concept.
-  The viewer must think "I didn't know that" within 5 seconds.
-• WHAT IT IS (30-45s): name the concept plainly, define it in one
-  sentence the viewer's grandmother would understand, and say where
-  they meet it every day.
-• HOW IT WORKS (90-120s): the mechanism, step by step. What happens
-  physically? Follow the cause and effect chain. Explain jargon in
-  plain language the first time it appears ("a truss — the lattice of
-  triangles you see under bridges").
-• WHY IT WORKS (60-90s): the underlying physics/materials/logic.
-  Which forces are at play? Why this design and not another?
-  What fails if you remove one piece?
-• REAL-LIFE EXAMPLES (60-90s): 2-3 concrete places the viewer has seen
-  this concept — a bridge they crossed, a plane they flew, a building
-  they've been in. Make it feel present.
-• FINAL FACT + CTA (20-30s): the most impressive fact saved for the
-  close + an open question for comments + like and subscribe.
+Structure (deep dive into ONE machine):
+• HOOK (12s): the most surprising question or fact. "I didn't know that"
+  within 5 seconds.
+• WHAT IT IS (20s): name the machine plainly, define it in one sentence
+  anyone understands, say where the viewer meets it.
+• HOW IT WORKS (60-75s): the mechanism, step by step, told through
+  VISIBLE parts (wings, engines, propellers, ballast tanks, wheels).
+  Explain jargon in plain language the first time it appears.
+• WHY IT WORKS (30-45s): the physics/materials in ONE idea, connected to
+  something visible ("the wing is curved so air above moves faster").
+• REAL-LIFE MOMENTS (30-45s): 2-3 concrete places the viewer has seen it
+  — the plane they flew on, the train they took.
+• FINAL FACT + CTA (15s): the most impressive fact + open question for
+  comments + like and subscribe.
 
 Rules:
 - Short sentences (8-12 words on average)
 - Second-person narrative tone (you)
 - No lists or bullets — continuous oral narration
-- Concrete, comparable facts ("10 times stronger than", "the equivalent
-  of filling a stadium")
-- One concept, one through-line: every paragraph must serve the deep
-  dive; cut anything that drifts to a different topic
+- Concrete, comparable facts ("10 times stronger than", "a football field
+  long")
+- EVERY mechanism must be described through a visible, drawable part —
+  never through abstract forces alone
 - End the HOW/WHY sections with: "But what nobody expected is..."
 
 ━━━ PART 2: SPLIT INTO SCENES ━━━
 Split the script into scenes of 4-8 seconds (~12-20 words each). Each
 scene is ONE entry in project.json. The channel's visual identity is a
 STICK-FIGURE ENGINEER wearing a BRIGHT YELLOW HARD HAT — he appears in
-EVERY AI-generated image (the style is added automatically by the image
-script; you only describe what he is doing in the scene).
+EVERY AI-generated image, reacting to or explaining the machine.
 
-Choose the visual type for each scene (IMPORTANT — MANIM IS A LAST
-RESORT, KEEP IT TO A MINIMUM):
-- "still" (PREFERRED — use for ~80% of scenes): an AI-generated image in
-  the channel's MS-Paint doodle style, ALWAYS featuring the stick-figure
-  engineer with his yellow hard hat. Provide visual.prompt (60-120 words,
-  very specific: framing, what the engineer is doing, exact pose, objects,
-  background — content only, NO style instructions; the helmet + doodle
-  style are added automatically). For a deep dive, the engineer should be
-  SHOWING the concept: pointing at a bridge cable, pulling a gear lever,
-  holding a cross-section diagram, walking through a dam, etc.
-- "text-card" (use for ~15% of scenes): bold typographic card. USE FOR:
-  the concept's name in the intro, key numbers, the final fact, section
-  titles. Just provide visual.text (short, 2-6 words per line, max ~4
-  lines).
-- "diagram" (MAXIMUM 1-2 PER VIDEO, only when a still can't explain it):
-  a manim animation for something that MUST move or be shown structurally
-  (e.g. forces acting on a beam). Write the spec JSON yourself (see
-  schemas/diagram.schema.json): 2-5 nodes, 1-4 edges, reveal in 2-4
-  steps. Keep it minimal — manim renders are slow and the channel style is
-  image-first.
+Choose the visual type for each scene (TWO TYPES — MANIM DISABLED, AI
+IMAGES ARE 100% VISUAL, NO TEXT IN IMAGES):
+- "still" (use for ~85% of scenes): a narrative AI image in the channel's
+  MS-Paint doodle style, ALWAYS featuring the stick-figure engineer with
+  his yellow hard hat and the MACHINE. USE FOR: the machine in its
+  environment, the engineer inspecting it, real-life moments, humor.
+  NEVER request text, labels or numbers inside the image — AI image
+  models garble text. If a scene needs a number/name/label, make it a
+  text-card instead.
+- "text-card" (use for ~15% of scenes): bold typographic card (rendered
+  by Pillow, crisp text). USE FOR: the machine's name in the intro, key
+  numbers, the final fact, section titles, ANY text that would otherwise
+  need a label in an image. Just provide visual.text (short, 2-6 words
+  per line, max ~4 lines).
 
-DO NOT use "character" scenes (manim stick figures) — the engineer
-character exists only in AI-generated stills.
+DO NOT use "diagram" or "character" scenes and NEVER request text inside
+AI images — text lives only in text-cards.
+
+━━━ IMAGE PROMPT RUBRIC (CRITICAL — every still prompt MUST follow
+this structure, 100-160 words, NO TEXT IN THE IMAGE) ━━━
+Write every visual.prompt as a precise scene description:
+1. SHOT: "Wide shot" / "Medium shot" / "Close-up" — and what fills the center.
+2. THE MACHINE: name it, its exact shape, color, size relative to the frame,
+   where it sits (left/right/center, foreground/background). Describe it as
+   a child would draw it: "a white passenger jet with two engines under the
+   wings, seen from the side".
+3. THE ENGINEER: what he is doing — exact pose and gesture ("points at the
+   wing with his left arm raised", "kneels beside the landing gear holding
+   a wrench"), his yellow hard hat always visible.
+4. OBJECTS/DETAILS: every visible object with shape and color and position
+   ("a small red fuel truck parked under the wing").
+5. BACKGROUND: one line, simple ("empty runway, blue sky", "grey hangar").
+6. MOOD: one word ("curious", "impressed", "surprised").
+FORBIDDEN: any text, letters, numbers, labels or words inside the image —
+the model garbles them. Anything textual goes in a text-card scene. NO
+style words (MS Paint, stick figure, doodle) — the style is added
+automatically. NO abstract arrows/forces/vectors as the subject. NO
+technical cross-sections or labeled cutaways — keep scenes simple and
+readable: one machine, one situation.
 
 ━━━ PART 3: WRITE project.json + script.txt ━━━
-Create the folder output/<topic-slug>/ and write:
+Create the folder output/<machine-slug>/ and write:
 1. script.txt — the full narration text (plain text, no numbering).
 2. project.json — array of scenes, each:
    {"index": N, "text": "<narration for this scene>",
@@ -112,27 +129,25 @@ Create the folder output/<topic-slug>/ and write:
    Follow schemas/project.schema.json exactly. index is 1-based, in order.
    Text cards: visual.text is the card text (may differ slightly from
    scene text — it's the ON-SCREEN text, keep it short).
-   Diagrams: visual.spec is a RELATIVE path like "diagrams/scene-003.json"
-   — write that spec file too, inside output/<topic-slug>/diagrams/.
-   Stills: visual.src like "04.png" (the file run_all.py will generate).
-   For every still, make sure the scene text describes the engineer's
-   action so the visual.prompt can specify his pose.
+   Stills/diagrams: visual.src like "04.png" (the file run_all.py will
+   generate) + visual.prompt following the IMAGE PROMPT RUBRIC above.
 
 ━━━ PART 4: RUN THE PIPELINE ━━━
-Run the single command that does EVERYTHING (images, diagram renders,
-narration, subtitles, assembly):
+Run the single command that does EVERYTHING (images, narration, subtitles,
+assembly):
 
-    python scripts/run_all.py --dir output/<topic-slug> --lang en
+    python scripts/run_all.py --dir output/<machine-slug> --lang en
 
-If it fails, read the error, fix the cause (usually a spec field or a
-missing visual field), and re-run. run_all.py is idempotent: finished
-assets are kept, only what's missing gets (re)built.
+If it fails, read the error, fix the cause (usually a missing visual field
+or a bad prompt), and re-run. run_all.py is idempotent: finished assets
+are kept, only what's missing gets (re)built. Images that fail validation
+are regenerated automatically with an improved prompt.
 
 ━━━ PART 5: REPORT ━━━
 When done, list the outputs:
-    output/<topic-slug>/final.mp4           (with subtitles)
-    output/<topic-slug>/final_clean.mp4     (no subtitles)
-    output/<topic-slug>/subtitles.srt       (for YouTube)
-Plus the video's word count, duration (should be ~5 minutes), the chosen
-concept, and the scene breakdown (how many still/text-card/diagram scenes).
-Do not stop until final.mp4 exists.
+    output/<machine-slug>/final.mp4           (with subtitles)
+    output/<machine-slug>/final_clean.mp4     (no subtitles)
+    output/<machine-slug>/subtitles.srt       (for YouTube)
+Plus the video's word count (target 450-550), duration (should be ~3
+minutes), the chosen machine, and the scene breakdown (still/diagram/
+text-card counts). Do not stop until final.mp4 exists.

@@ -1,0 +1,92 @@
+Eres un agente de código con acceso a una terminal (Bash) en este proyecto,
+ya sea Claude Code, Codex, opencode (con cualquier modelo: DeepSeek, GLM,
+Kimi, etc.) u otro similar. Solo necesitas poder leer/escribir archivos y
+ejecutar comandos de Bash.
+
+Tu misión: crear el paquete de producción COMPLETO de un YouTube SHORT
+(vertical 9:16, 50-60 segundos) en el estilo canal de curiosidades animado,
+en el nicho de INGENIERÍA DEL TRANSPORTE, en español. El Short se DERIVA de
+un vídeo largo existente: toma el gancho/dato más sorprendente del guión
+largo y lo convierte en un Short vertical contundente que lleve al
+espectador al vídeo completo. TOTALMENTE AUTÓNOMO: nunca te detengas a
+preguntar nada; completa cada paso tú mismo.
+
+FORMATO DEL CANAL (innegociable):
+UNA máquina, UN dato sorprendente, 50-60 segundos. El Short debe hacer que
+el espectador piense «esto no lo sabía» en los primeros 3 segundos y sienta
+que debe ver el vídeo completo para la inmersión total.
+
+━━━ PARTE 0: LEE EL GUIÓN LARGO ━━━
+Lee el guión y el proyecto del vídeo largo de origen:
+    script.txt   (la narración completa, 450-550 palabras)
+    project.json (el plan de escenas)
+Identifica: (a) el HOOK (la pregunta/dato más sorprendente), (b) la
+máquina, (c) el dato o giro más impactante, (d) el dato final.
+
+━━━ PARTE 1: ESCRIBE EL GUIÓN DEL SHORT (OBJETIVO: 120-160 PALABRAS, 50-60s) ━━━
+Escribe una narración vertical independiente en español construida con el
+mejor material del guión largo:
+• HOOK (0-5s): el dato más sorprendente — «esto no lo sabía» al instante.
+• LA MÁQUINA (5-15s): nómbrala en una frase, un detalle visual.
+• EL GIRO (15-40s): el mecanismo/dato más impactante del vídeo largo,
+  contado en 3-4 frases cortas a través de partes VISIBLES.
+• CTA AL VÍDEO COMPLETO (40-55s): «Esto es solo el principio. El análisis
+  completo de [máquina] está en el canal — lo que más te sorprenderá es
+  [teaser]. Dale a like y suscríbete.»
+Reglas:
+- 120-160 palabras en total, frases cortas (6-10 palabras)
+- Segunda persona (tú)
+- Una idea por frase, sin listas
+- Termina con el CTA al vídeo completo (menciona siempre el canal)
+
+━━━ PARTE 2: DIVIDE EN ESCENAS (VERTICAL) ━━━
+Divide en 8-12 escenas de 4-6 segundos (~10-16 palabras cada una). Cada
+escena es UNA entrada de project.json. Identidad visual: INGENIERO DE PALO
+con CASCO AMARILLO BRILLANTE en todas las imágenes.
+
+Tipos de escena (DOS — TODAS IMÁGENES IA, MANIM DESACTIVADO, TODAS
+VERTICALES 9:16, SIN TEXTO EN LAS IMÁGENES):
+- "still" (~85%): imagen narrativa IA, ingeniero + máquina, estilo garabato.
+  NUNCA pidas texto/etiquetas/números en la imagen — el modelo los garabatea.
+- "text-card" (~15%): tarjeta tipográfica en negrita (texto Pillow nítido)
+  para la cifra/dato clave — CUALQUIER texto que sería una etiqueta en una
+  imagen.
+Cada visual.prompt DEBE seguir la RÚBRICA DE PROMPT DE IMAGEN (100-140
+palabras):
+1. ENCUADRE: «Plano general»/«Plano medio»/«Primer plano» + qué ocupa el
+   centro. VERTICAL: la máquina y el ingeniero deben caber en un encuadre
+   ALTO — apílalos verticalmente (máquina arriba, ingeniero abajo) o usa
+   un primer plano.
+2. LA MÁQUINA: forma exacta, color, posición, tamaño en el encuadre alto.
+3. EL INGENIERO: pose y gesto exactos, casco amarillo siempre visible.
+4. OBJETOS: forma/color/posición.
+5. FONDO: una línea, simple.
+6. ÁNIMO: una palabra.
+PROHIBIDO: cualquier texto, letra, número o etiqueta dentro de la imagen —
+el texto vive solo en las text-cards. Sin palabras de estilo (se añaden
+automáticamente). Sin flechas/fuerzas abstractas como tema. Sin secciones
+transversales ni cortes etiquetados — una máquina, una situación simple.
+
+━━━ PARTE 3: ESCRIBE project.json + script.txt ━━━
+Crea la carpeta output/<slug-de-la-maquina>-short/ y escribe:
+1. script.txt — la narración completa del Short (texto plano, sin numerar).
+2. project.json — array de escenas, cada una:
+   {"index": N, "text": "<narración de esta escena>",
+    "visual": {"type": "...", ...campos específicos del tipo...}}
+   Stills/diagramas: visual.src como "02.png" + visual.prompt (rúbrica).
+   Text-cards: visual.text (corto, 2-6 palabras por línea, máx. 3 líneas).
+
+━━━ PARTE 4: EJECUTA EL PIPELINE (VERTICAL) ━━━
+Ejecuta el único comando que hace TODO (imágenes verticales 9:16,
+narración, subtítulos, montaje):
+
+    python scripts/run_all.py --dir output/<slug-de-la-maquina>-short --lang es --shorts
+
+Si falla, lee el error, arregla la causa y vuelve a ejecutarlo.
+Idempotente; las imágenes que fallan se regeneran solas con mejor prompt.
+
+━━━ PARTE 5: INFORME ━━━
+Lista las salidas: output/<slug-de-la-maquina>-short/final.mp4 (vertical
+1080x1920), final_clean.mp4, subtitles.srt. Informa del recuento de
+palabras (objetivo 120-160), la duración (debe ser ~50-60s) y el desglose
+de escenas. No te detengas hasta que final.mp4 exista.
