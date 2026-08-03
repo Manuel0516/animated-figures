@@ -44,13 +44,17 @@ Split into 8-12 scenes of 4-6 seconds (~10-16 words each). Each scene is
 ONE entry in project.json. Visual identity: STICK-FIGURE ENGINEER with a
 BRIGHT YELLOW HARD HAT in every image.
 
-Scene types (TWO — ALL AI IMAGES, MANIM DISABLED, ALL VERTICAL 9:16,
-NO TEXT IN IMAGES):
-- "still" (~85%): narrative AI image, engineer + machine, doodle style.
+Scene types (THREE — MANIM DISABLED, ALL VERTICAL 9:16):
+- "still" (~70%): narrative AI image, engineer + machine, doodle style.
   NEVER request text/labels/numbers in the image — the model garbles them.
+- "diagram" (~15%): CODE-GENERATED diagram (Pillow, crisp perfect text —
+  NOT an AI image). USE FOR any labeled structure: flow, stages, parts.
+  Write a spec JSON (nodes id+label, edges from/to/label, optional title;
+  2-6 nodes, 1-6 edges); visual.spec = "diagrams/scene-NNN.json" and put
+  the spec under diagram_specs in the output JSON.
 - "text-card" (~15%): bold typographic card (crisp Pillow text) for the
-  key number/fact — ANY text that would otherwise be a label in an image.
-Every visual.prompt MUST follow the IMAGE PROMPT RUBRIC (100-140 words):
+  key number/fact.
+Every still visual.prompt MUST follow the IMAGE PROMPT RUBRIC (100-140 words):
 1. SHOT: "Wide shot"/"Medium shot"/"Close-up" + what fills the center.
    VERTICAL: the machine and engineer must both fit in a TALL frame —
    stack them vertically (machine top, engineer bottom) or use a close-up.

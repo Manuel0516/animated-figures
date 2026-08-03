@@ -37,8 +37,9 @@ DEFAULT_VOICES = {
     "es": "es-ES-AlvaroNeural",
 }
 
-IMAGE_TYPES = {"still"}  # AI-generated images only; text lives in text-cards
-MANIM_TYPES = set()      # manim disabled; stale diagram/character scenes -> text-card
+IMAGE_TYPES = {"still"}       # AI-generated images (100% visual, no text)
+DIAGRAM_TYPES = {"diagram"}   # code-generated diagrams via Pillow (crisp text)
+MANIM_TYPES = set()           # manim disabled; stale character scenes -> text-card
 
 
 def run(cmd, label):
@@ -94,25 +95,24 @@ def main():
     project = json.loads(project_path.read_text(encoding="utf-8"))
 
     # --- 1+2+3: ensure visual assets exist -----------------------------------
-    # manim is DISABLED and AI images carry NO text. Any stale diagram/character
-    # scene (from an older project.json or a model that ignored the prompt) is
-    # converted to a text-card so the pipeline never depends on manim or on
-    # AI-rendered text.
+    # manim is DISABLED and AI images carry NO text. "diagram" scenes are
+    # rendered from a declarative spec by Pillow (crisp vector, perfect text).
+    # Stale "character" scenes convert to text-card.
     converted = 0
     for scene in project:
         vtype = scene_visual_type(scene)
-        if vtype in ("diagram", "character"):
+        if vtype == "character":
             card_text = (scene.get("visual", {}).get("text")
                          or scene.get("text", "").strip()[:60]
                          or "ENGINEERING")
             scene["visual"] = {"type": "text-card", "text": card_text}
             converted += 1
     if converted:
-        print(f"  ! {converted} escena(s) diagram/character convertidas a text-card "
-              f"(manim desactivado, sin texto en imágenes)")
+        print(f"  ! {converted} escena(s) character convertidas a text-card (manim desactivado)")
         project_path.write_text(json.dumps(project, ensure_ascii=False, indent=2), encoding="utf-8")
 
     stills_needed = [s for s in project if scene_visual_type(s) in IMAGE_TYPES]
+    diagrams_needed = [s for s in project if scene_visual_type(s) in DIAGRAM_TYPES]
     manim_needed = [s for s in project if scene_visual_type(s) in MANIM_TYPES]
 
     # Pick image backend: prefer OpenRouter when its key is set (user's
@@ -160,6 +160,29 @@ def main():
             run([sys.executable, image_script, "--prompt", prompt_final, "--out", src],
                 f"imagen escena {scene['index']:02d}" + (f" (intento {attempt + 1})" if attempt > 0 else ""))
             attempt += 1
+
+    # 2b: render "diagram" scenes from their declarative spec via Pillow.
+    diagram_renderer = SCRIPTS / "render_diagram_pillow.py"
+    for scene in diagrams_needed:
+        spec_rel = scene["visual"].get("spec")
+        if not spec_rel:
+            sys.exit(f"Escena {scene['index']:02d}: falta visual.spec en project.json "
+                     f"para el diagrama.")
+        spec = video_dir / spec_rel
+        if not spec.exists():
+            sys.exit(f"Escena {scene['index']:02d}: no existe el spec {spec}")
+        out_png = video_dir / "diagrams" / f"scene-{scene['index']:03d}.png"
+        if out_png.exists() and out_png.stat().st_size > 0:
+            print(f"  = diagrama ya existe: {out_png.name}")
+        else:
+            run([sys.executable, diagram_renderer, "--spec", spec, "--out", out_png],
+                f"diagrama escena {scene['index']:02d}")
+        # Point the scene at the rendered PNG so the assembler uses it as a
+        # still (Ken Burns) with crisp text.
+        scene["visual"]["src"] = str(out_png.relative_to(video_dir))
+
+    if diagrams_needed:
+        project_path.write_text(json.dumps(project, ensure_ascii=False, indent=2), encoding="utf-8")
 
     for scene in manim_needed:
         vtype = scene_visual_type(scene)

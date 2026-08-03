@@ -80,23 +80,38 @@ scene is ONE entry in project.json. The channel's visual identity is a
 STICK-FIGURE ENGINEER wearing a BRIGHT YELLOW HARD HAT — he appears in
 EVERY AI-generated image, reacting to or explaining the machine.
 
-Choose the visual type for each scene (TWO TYPES — MANIM DISABLED, AI
-IMAGES ARE 100% VISUAL, NO TEXT IN IMAGES):
-- "still" (use for ~85% of scenes): a narrative AI image in the channel's
+Choose the visual type for each scene (THREE TYPES):
+- "still" (use for ~70% of scenes): a narrative AI image in the channel's
   MS-Paint doodle style, ALWAYS featuring the stick-figure engineer with
   his yellow hard hat and the MACHINE. USE FOR: the machine in its
   environment, the engineer inspecting it, real-life moments, humor.
   NEVER request text, labels or numbers inside the image — AI image
-  models garble text. If a scene needs a number/name/label, make it a
-  text-card instead.
-- "text-card" (use for ~15% of scenes): bold typographic card (rendered
-  by Pillow, crisp text). USE FOR: the machine's name in the intro, key
-  numbers, the final fact, section titles, ANY text that would otherwise
-  need a label in an image. Just provide visual.text (short, 2-6 words
-  per line, max ~4 lines).
+  models garble text.
+- "diagram" (use for ~15% of scenes): a CODE-GENERATED diagram (rendered
+  by Pillow, crisp perfect text — NOT an AI image). USE FOR: any
+  technical moment that needs labels or structure: flow paths, part
+  names, stages, comparisons, cross-sections with named parts. You write
+  a declarative spec JSON: nodes (id + label) and edges (from/to +
+  optional label), plus optional title. Keep it simple: 2-6 nodes, 1-6
+  edges. Example spec:
+    {"title": "Jet engine airflow", "nodes": [
+      {"id": "fan", "label": "FAN"},
+      {"id": "core", "label": "CORE"},
+      {"id": "nozzle", "label": "NOZZLE"}],
+     "edges": [
+      {"from": "fan", "to": "core", "label": "air"},
+      {"from": "core", "to": "nozzle", "label": "thrust"}]}
+  The diagram file path goes in visual.spec (relative, like
+  "diagrams/scene-003.json") — write the spec file too, under
+  output/<slug>/diagrams/.
+- "text-card" (use for ~15% of scenes): bold typographic card (Pillow,
+  crisp text). USE FOR: the machine's name in the intro, key numbers,
+  the final fact, section titles. Just provide visual.text (short, 2-6
+  words per line, max ~4 lines).
 
-DO NOT use "diagram" or "character" scenes and NEVER request text inside
-AI images — text lives only in text-cards.
+DO NOT use "character" scenes, NEVER request text inside AI images, and
+never put labels in a "still" prompt — labels/structure go in "diagram"
+(code-generated) or "text-card" scenes.
 
 ━━━ IMAGE PROMPT RUBRIC (CRITICAL — every still prompt MUST follow
 this structure, 100-160 words, NO TEXT IN THE IMAGE) ━━━

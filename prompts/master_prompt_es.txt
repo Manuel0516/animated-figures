@@ -84,24 +84,38 @@ Cada escena es UNA entrada de project.json. La identidad visual del canal
 es un INGENIERO DE PALO con CASCO AMARILLO BRILLANTE — aparece en TODAS las
 imágenes generadas por IA, reaccionando o explicando la máquina.
 
-Elige el tipo de visual para cada escena (DOS TIPOS — MANIM DESACTIVADO,
-LAS IMÁGENES IA SON 100% VISUALES, SIN TEXTO EN LAS IMÁGENES):
-- "still" (úsalo en ~85% de las escenas): imagen narrativa generada por IA
+Elige el tipo de visual para cada escena (TRES TIPOS):
+- "still" (úsalo en ~70% de las escenas): imagen narrativa generada por IA
   en el estilo garabato MS-Paint del canal, SIEMPRE con el ingeniero de
   palo con su casco amarillo y la MÁQUINA. ÚSALO PARA: la máquina en su
   entorno, el ingeniero inspeccionándola, momentos reales, humor. NUNCA
   pidas texto, etiquetas o números dentro de la imagen — los modelos de
-  imagen IA garabatean el texto. Si una escena necesita un número/nombre/
-  etiqueta, hazla text-card.
+  imagen IA garabatean el texto.
+- "diagram" (úsalo en ~15% de las escenas): un diagrama GENERADO POR
+  CÓDIGO (renderizado con Pillow, texto nítido y perfecto — NO es una
+  imagen IA). ÚSALO PARA: cualquier momento técnico que necesite etiquetas
+  o estructura: rutas de flujo, nombres de piezas, etapas, comparaciones,
+  secciones transversales con partes nombradas. Escribe un spec JSON
+  declarativo: nodos (id + label) y aristas (from/to + label opcional),
+  más un title opcional. Mantenlo simple: 2-6 nodos, 1-6 aristas. Ejemplo:
+    {"title": "Flujo motor a reacción", "nodes": [
+      {"id": "fan", "label": "VENTILADOR"},
+      {"id": "core", "label": "NÚCLEO"},
+      {"id": "nozzle", "label": "TOBERA"}],
+     "edges": [
+      {"from": "fan", "to": "core", "label": "aire"},
+      {"from": "core", "to": "nozzle", "label": "empuje"}]}
+  La ruta del diagrama va en visual.spec (relativa, como
+  "diagrams/scene-003.json") — escribe también el archivo de spec, dentro
+  de output/<slug>/diagrams/.
 - "text-card" (úsalo en ~15% de las escenas): tarjeta tipográfica en
-  negrita (renderizada con Pillow, texto nítido). ÚSALO PARA: el nombre de
-  la máquina en la introducción, cifras clave, el dato final, títulos de
-  sección, CUALQUIER texto que de otro modo sería una etiqueta en una
-  imagen. Solo aporta visual.text (corto, 2-6 palabras por línea, máx. ~4
-  líneas).
+  negrita (Pillow, texto nítido). ÚSALO PARA: el nombre de la máquina en
+  la introducción, cifras clave, el dato final, títulos de sección. Solo
+  aporta visual.text (corto, 2-6 palabras por línea, máx. ~4 líneas).
 
-NO uses escenas "diagram" ni "character" y NUNCA pidas texto dentro de las
-imágenes IA — el texto vive solo en las text-cards.
+NO uses escenas "character", NUNCA pidas texto dentro de las imágenes IA
+y nunca pongas etiquetas en un prompt "still" — las etiquetas y la
+estructura van en escenas "diagram" (generadas por código) o "text-card".
 
 ━━━ RÚBRICA DE PROMPT DE IMAGEN (CRÍTICO — cada prompt still debe seguir
 esta estructura, 100-160 palabras, SIN TEXTO EN LA IMAGEN) ━━━

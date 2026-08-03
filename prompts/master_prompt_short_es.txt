@@ -44,15 +44,19 @@ Divide en 8-12 escenas de 4-6 segundos (~10-16 palabras cada una). Cada
 escena es UNA entrada de project.json. Identidad visual: INGENIERO DE PALO
 con CASCO AMARILLO BRILLANTE en todas las imágenes.
 
-Tipos de escena (DOS — TODAS IMÁGENES IA, MANIM DESACTIVADO, TODAS
-VERTICALES 9:16, SIN TEXTO EN LAS IMÁGENES):
-- "still" (~85%): imagen narrativa IA, ingeniero + máquina, estilo garabato.
+Tipos de escena (TRES — MANIM DESACTIVADO, TODAS VERTICALES 9:16):
+- "still" (~70%): imagen narrativa IA, ingeniero + máquina, estilo garabato.
   NUNCA pidas texto/etiquetas/números en la imagen — el modelo los garabatea.
+- "diagram" (~15%): diagrama GENERADO POR CÓDIGO (Pillow, texto nítido y
+  perfecto — NO es una imagen IA). ÚSALO para cualquier estructura con
+  etiquetas: flujo, etapas, piezas. Escribe un spec JSON (nodos id+label,
+  aristas from/to/label, title opcional; 2-6 nodos, 1-6 aristas);
+  visual.spec = "diagrams/scene-NNN.json" e incluye el spec en
+  diagram_specs del JSON de salida.
 - "text-card" (~15%): tarjeta tipográfica en negrita (texto Pillow nítido)
-  para la cifra/dato clave — CUALQUIER texto que sería una etiqueta en una
-  imagen.
-Cada visual.prompt DEBE seguir la RÚBRICA DE PROMPT DE IMAGEN (100-140
-palabras):
+  para la cifra/dato clave.
+Cada visual.prompt de still DEBE seguir la RÚBRICA DE PROMPT DE IMAGEN
+(100-140 palabras):
 1. ENCUADRE: «Plano general»/«Plano medio»/«Primer plano» + qué ocupa el
    centro. VERTICAL: la máquina y el ingeniero deben caber en un encuadre
    ALTO — apílalos verticalmente (máquina arriba, ingeniero abajo) o usa

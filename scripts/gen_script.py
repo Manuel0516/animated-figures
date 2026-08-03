@@ -56,12 +56,14 @@ fences, no commentary before or after, with EXACTLY this shape:
       "index": 1,
       "text": "<narration for this scene>",
       "visual": {{
-        "type": "still|text-card",
+        "type": "still|diagram|text-card",
         ...type-specific fields as specified in PART 2...
       }}
     }}
   ],
-  "diagram_specs": {{}}
+  "diagram_specs": {{
+    "<relative spec path like diagrams/scene-003.json>": {{ "title": "...", "nodes": [{{"id": "...", "label": "..."}}], "edges": [{{"from": "...", "to": "...", "label": "..."}}] }}
+  }}
 }}
 
 Rules for the JSON:
@@ -74,9 +76,11 @@ Rules for the JSON:
   yellow hard hat, objects with shape/color/position, one-line background,
   one-word mood. NEVER include text/labels/numbers in the image prompt.
   Never a short one-liner.
+- for "diagram": visual = {{"type": "diagram", "spec": "diagrams/scene-NNN.json"}}
+  AND include that spec under diagram_specs (nodes with id+label, edges
+  with from/to/label, optional title; 2-6 nodes, 1-6 edges).
 - for "text-card": visual = {{"type": "text-card", "text": "<short on-screen text>"}}
-- ONLY "still" and "text-card" scene types. Never "diagram" or "character".
-- diagram_specs must be an empty object {{}} (no manim, no diagrams).
+- ONLY "still", "diagram" and "text-card" scene types. Never "character".
 - the JSON must parse with json.loads as-is.
 """
 
